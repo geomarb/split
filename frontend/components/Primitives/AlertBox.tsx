@@ -6,14 +6,16 @@ import { styled } from "../../stitches.config";
 import InfoIcon from "../../public/icons/toast/infoAlert.svg";
 
 interface AlertBoxProps {
-  type: "warning" | "info";
+  // eslint-disable-next-line react/require-default-props
+  type?: "warning" | "info";
   title?: string;
   text: string;
 }
 
 const AlertStyle = styled(Flex, {
   padding: "16px 40px",
-  height: "fit-content",
+  height: "$64",
+  width: "100%",
   alignItems: "center",
   border: "1px solid",
   borderRadius: "$12",
@@ -31,10 +33,9 @@ const AlertText = styled(Flex, {
 
 const AlertIconStyle = styled(Flex, {});
 
-const AlertBox: React.FC<AlertBoxProps> = ({ type, title, text }) => {
+const AlertBox: React.FC<AlertBoxProps> = ({ type = "info", title, text }) => {
   AlertBox.defaultProps = { title: undefined };
   const isWarning = type === "warning";
-
   return (
     <AlertStyle
       css={{

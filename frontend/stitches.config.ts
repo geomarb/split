@@ -120,10 +120,13 @@ export const { styled, css, globalCss, keyframes, getCssText, theme, createTheme
         130: "5rem",
         160: "10rem",
         220: "13.75rem",
+        236: "14.75",
         353: "22.063rem",
         400: "25rem",
         455: "28.4375rem",
         500: "31.25rem",
+        584: "36.5rem",
+        968: "60.5rem",
       },
       lineHeights: {
         8: "0.5rem",
