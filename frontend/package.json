@@ -13,8 +13,12 @@
     "jest": "jest"
   },
   "dependencies": {
+    "@emotion/react": "^11.9.0",
+    "@emotion/styled": "^11.8.1",
     "@hookform/resolvers": "^2.8.8",
     "@modulz/radix-icons": "^4.0.0",
+    "@mui/material": "^5.6.1",
+    "@mui/styled-engine-sc": "^5.6.1",
     "@radix-ui/colors": "^0.1.8",
     "@radix-ui/react-alert-dialog": "^0.1.7",
     "@radix-ui/react-avatar": "^0.1.4",
