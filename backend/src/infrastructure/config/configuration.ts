@@ -49,7 +49,7 @@ export const configuration = (): Configuration => {
     },
     slack: {
       botToken: process.env.SLACK_API_BOT_TOKEN as string,
-      channelSuffix: process.env.SLACK_CHANNEL_SUFIX as string,
+      channelPrefix: process.env.SLACK_CHANNEL_PREFIX as string,
     },
   };
 
