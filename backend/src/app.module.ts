@@ -17,6 +17,7 @@ import {
   mongooseResetModule,
   mongooseUserModule,
 } from './infrastructure/database/mongoose.module';
+import { SlackModule } from './modules/slack/slack.module';
 
 const imports = [
   AppConfigModule,
@@ -33,6 +34,7 @@ const imports = [
   mongooseResetModule,
   mongooseUserModule,
   ScheduleModule.forRoot(),
+  SlackModule,
 ];
 
 if (configuration().azure.enabled) {
