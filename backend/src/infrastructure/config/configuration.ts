@@ -47,6 +47,10 @@ export const configuration = (): Configuration => {
       password: process.env.SMTP_PASSWORD as string,
       enabled: process.env.STMP_ENABLE === 'true',
     },
+    slack: {
+      botToken: process.env.SLACK_API_BOT_TOKEN as string,
+      channelSuffix: process.env.SLACK_CHANNEL_SUFIX as string,
+    },
   };
 
   return defaultConfiguration;

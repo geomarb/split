@@ -24,4 +24,8 @@ export interface Configuration extends AzureConfiguration {
       expirationTime: number;
     };
   };
+  slack: {
+    botToken: string;
+    channelSuffix: string;
+  };
 }
