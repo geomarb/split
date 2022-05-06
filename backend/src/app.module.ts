@@ -34,7 +34,6 @@ const imports = [
   mongooseResetModule,
   mongooseUserModule,
   ScheduleModule.forRoot(),
-  SlackModule,
 ];
 
 if (configuration().azure.enabled) {
@@ -43,6 +42,9 @@ if (configuration().azure.enabled) {
 
 if (configuration().smtp.enabled) {
   imports.push(EmailModule);
+}
+if (configuration().slack.enabled) {
+  imports.push(SlackModule);
 }
 
 @Module({

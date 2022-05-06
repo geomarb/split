@@ -25,6 +25,7 @@ export interface Configuration extends AzureConfiguration {
     };
   };
   slack: {
+    enabled: boolean;
     botToken: string;
     channelPrefix: string;
   };
