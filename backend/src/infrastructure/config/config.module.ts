@@ -71,6 +71,11 @@ const NODE_ENV = process.env.NODE_ENV;
           then: Joi.required(),
           otherwise: Joi.optional(),
         }),
+        SLACK_MASTER_CHANNEL_ID: Joi.string().when('SLACK_ENABLE', {
+          is: 'true',
+          then: Joi.required(),
+          otherwise: Joi.optional(),
+        }),
         SLACK_CHANNEL_PREFIX: Joi.string().when('SLACK_ENABLE', {
           is: 'true',
           then: Joi.required(),
