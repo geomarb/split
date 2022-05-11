@@ -1,7 +1,11 @@
 export class CreateChannelDto {
+  isPrivate?: boolean;
+
   name!: string;
 
-  title!: string;
+  description?: string;
 
-  message!: string;
+  orgWide?: boolean;
+
+  teamId?: string;
 }

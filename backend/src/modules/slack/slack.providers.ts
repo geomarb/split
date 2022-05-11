@@ -1,7 +1,7 @@
 import { TYPES } from './interfaces/types';
-import { ChannelSlackService } from './services/channel.slack.service';
+import { ConversationsSlackService } from './services/conversations.slack.service';
 
-export const channelSlackService = {
-  provide: TYPES.services.ChannelSlackService,
-  useClass: ChannelSlackService,
+export const conversationsSlackService = {
+  provide: TYPES.services.ConversationsSlackService,
+  useClass: ConversationsSlackService,
 };

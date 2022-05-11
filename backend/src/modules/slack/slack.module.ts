@@ -1,8 +1,10 @@
 import { Module } from '@nestjs/common';
-import { channelSlackService } from './slack.providers';
+import SlackController from './controller/slack.controller';
+import { conversationsSlackService } from './slack.providers';
 
 @Module({
-  providers: [channelSlackService],
-  exports: [channelSlackService],
+  providers: [conversationsSlackService],
+  controllers: [SlackController],
+  exports: [conversationsSlackService],
 })
 export class SlackModule {}
