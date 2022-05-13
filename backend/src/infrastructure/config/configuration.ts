@@ -50,7 +50,7 @@ export const configuration = (): Configuration => {
     slack: {
       enabled: process.env.SLACK_ENABLED === 'true',
       botToken: process.env.SLACK_API_BOT_TOKEN as string,
-      channelId: process.env.SLACK_MASTER_CHANNEL_ID as string,
+      masterChannelId: process.env.SLACK_MASTER_CHANNEL_ID as string,
       channelPrefix: process.env.SLACK_CHANNEL_PREFIX as string,
     },
   };
