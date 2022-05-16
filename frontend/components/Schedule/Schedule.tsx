@@ -70,10 +70,10 @@ const Schedule: React.FC = () => {
         </Flex>
         <Flex css={{ alignSelf: "auto" }}>
           <Flex css={{ width: "252px", marginRight: "16px" }}>
-            <SelectBox type="hour" title="From" />
+            <SelectBox type="hour" title="From" id="1" />
           </Flex>
           <Flex css={{ width: "252px" }}>
-            <SelectBox type="hour" title="To" />
+            <SelectBox id="2" type="hour" title="To" />
           </Flex>
         </Flex>
         <Seperator />
@@ -86,10 +86,10 @@ const Schedule: React.FC = () => {
         <Flex css={{ alignItems: "center", marginBottom: "", marginTop: "$12" }}>
           <BpCheckbox />
           <Flex css={{ maxWidth: "236px", marginRight: "16px" }}>
-            <SelectBox type="days" title="Select time range" />
+            <SelectBox id="3" type="days" title="Select time range" />
           </Flex>
           <Flex css={{ maxWidth: "236px" }}>
-            <SelectBox type="times" title="Select time unit" />
+            <SelectBox id="4" type="times" title="Select time unit" />
           </Flex>
         </Flex>
         <Flex direction="column" css={{ marginLeft: "32px", marginTop: "7px" }}>
@@ -120,10 +120,10 @@ const Schedule: React.FC = () => {
         <Flex css={{ alignItems: "center", marginBottom: "9px" }}>
           <BpCheckbox />
           <Flex css={{ maxWidth: "236px", marginRight: "16px" }}>
-            <SelectBox type="days" title="Select time range" />
+            <SelectBox id="5" type="days" title="Select time range" />
           </Flex>
           <Flex css={{ maxWidth: "236px" }}>
-            <SelectBox type="timesBefore" title="Select time unit" />
+            <SelectBox id="6" type="timesBefore" title="Select time unit" />
           </Flex>
         </Flex>
         <Flex direction="column" css={{ marginLeft: "32px" }}>
