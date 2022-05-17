@@ -154,18 +154,9 @@ const StyledSelect = styled(Select, {
 const SelectBox: React.FC<SelectBoxProps> = ({ type, title }) => {
   // eslint-disable-next-line @typescript-eslint/no-shadow
 
-  const [selectedValue, setSelectedValue] = useState([{ value: [] }]);
+  const [selectedValue] = useState([{ value: [] }]);
 
   // handle onChange event of the dropdown
-  const handleChange = (e, no) => {
-    setSelectedValue(
-      selectedValue.map((item) => {
-        return selectedValue.indexOf(item) === no
-          ? { value: Array.isArray(e) ? e.map((x) => x.value) : [] }
-          : item;
-      })
-    );
-  };
 
   const getSelectOption = () => {
     if (type === "hour") return hourOptions;
@@ -179,9 +170,9 @@ const SelectBox: React.FC<SelectBoxProps> = ({ type, title }) => {
   return (
     <>
       <StyledSelect
-        value={tryThis.find((obj) => selectedValue[0].value.includes(obj.value))} // set selected value
+        // value={tryThis.find((obj) => selectedValue[0].value.includes(obj.value))} // set selected value
         options={tryThis} // set list of the data
-        onChange={(event) => handleChange(event, 0)}
+        onChange={(evt) => console.log(evt)}
         components={{
           ValueContainer: CustomValueContainer,
         }}
