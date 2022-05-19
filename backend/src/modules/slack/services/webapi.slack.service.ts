@@ -10,12 +10,16 @@ import { WebApiSlackServiceInterface } from '../interfaces/services/webapi.slack
 export class WebApiSlackService implements WebApiSlackServiceInterface {
   private logger = new Logger(WebApiSlackService.name);
 
-  public client: WebClient;
+  private client: WebClient;
 
   constructor(private readonly configService: ConfigService) {
     this.client = new WebClient(this.configService.get(SLACK_API_BOT_TOKEN));
 
     this.logger.verbose('Slack web api client created');
+  }
+
+  public getClient(): WebClient {
+    return this.client;
   }
 }
 

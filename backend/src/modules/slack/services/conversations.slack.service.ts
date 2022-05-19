@@ -1,10 +1,10 @@
-import { forwardRef, Inject, Injectable, Logger } from '@nestjs/common';
+import { Inject, Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { SLACK_CHANNEL_PREFIX } from 'src/libs/constants/slack';
 import { CreateChannelDto } from '../dto/create.channel.slack.dto';
 import { ConversationsSlackServiceInterface } from '../interfaces/services/conversations.slack.service';
+import { WebApiSlackServiceInterface } from '../interfaces/services/webapi.slack.service';
 import { TYPES } from '../interfaces/types';
-import { WebApiSlackService } from './webapi.slack.service';
 
 @Injectable()
 export class ConversationsSlackService
@@ -14,8 +14,8 @@ export class ConversationsSlackService
 
   constructor(
     private readonly configService: ConfigService,
-    @Inject(forwardRef(() => TYPES.services.WebApiSlackService))
-    private readonly webApiSlackService: WebApiSlackService,
+    @Inject(TYPES.services.WebApiSlackService)
+    private readonly webApiSlackService: WebApiSlackServiceInterface,
   ) {}
 
   async createChannel(createChannelDto: CreateChannelDto): Promise<string> {
@@ -23,8 +23,9 @@ export class ConversationsSlackService
       const today = new Date();
 
       // https://api.slack.com/methods/admin.conversations.create
-      const { channel } =
-        await this.webApiSlackService.client.conversations.create({
+      const { channel } = await this.webApiSlackService
+        .getClient()
+        .conversations.create({
           name: `${this.configService.get(SLACK_CHANNEL_PREFIX)}${
             createChannelDto.name
           }-${today.getMonth() + 1}-${today.getFullYear()}`,
@@ -44,10 +45,12 @@ export class ConversationsSlackService
   ): Promise<boolean> {
     try {
       // https://api.slack.com/methods/admin.conversations.invite
-      const { ok } = await this.webApiSlackService.client.conversations.invite({
-        channel: channelId,
-        users: usersIds.join(','),
-      });
+      const { ok } = await this.webApiSlackService
+        .getClient()
+        .conversations.invite({
+          channel: channelId,
+          users: usersIds.join(','),
+        });
 
       return ok;
     } catch (error) {
@@ -66,7 +69,7 @@ export class ConversationsSlackService
         // https://api.slack.com/methods/conversations.members
         const result =
           // eslint-disable-next-line no-await-in-loop
-          await this.webApiSlackService.client.conversations.members({
+          await this.webApiSlackService.getClient().conversations.members({
             channel: channelId,
             cursor,
           });

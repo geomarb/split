@@ -1,4 +1,4 @@
-import { forwardRef, Inject, Injectable, Logger } from '@nestjs/common';
+import { Inject, Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { UsersSlackServiceInterface } from '../interfaces/services/users.slack.service';
 import { TYPES } from '../interfaces/types';
@@ -10,15 +10,16 @@ export class UsersSlackService implements UsersSlackServiceInterface {
 
   constructor(
     private readonly configService: ConfigService,
-    @Inject(forwardRef(() => TYPES.services.WebApiSlackService))
+    @Inject(TYPES.services.WebApiSlackService)
     private readonly webApiSlackService: WebApiSlackService,
   ) {}
 
   async getProfileById(userId: string): Promise<Profile> {
     try {
       // https://api.slack.com/methods/users.profile.get
-      const { profile } =
-        await this.webApiSlackService.client.users.profile.get({
+      const { profile } = await this.webApiSlackService
+        .getClient()
+        .users.profile.get({
           user: userId,
         });
 
@@ -53,8 +54,9 @@ export class UsersSlackService implements UsersSlackServiceInterface {
   async getEmailById(userId: string): Promise<string> {
     try {
       // https://api.slack.com/methods/users.profile.get
-      const { profile } =
-        await this.webApiSlackService.client.users.profile.get({
+      const { profile } = await this.webApiSlackService
+        .getClient()
+        .users.profile.get({
           user: userId,
         });
 

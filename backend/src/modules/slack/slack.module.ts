@@ -1,9 +1,18 @@
 import { Module } from '@nestjs/common';
-// import SlackController from './controller/slack.controller';
-import { SlackApiModule } from './slack.api.module';
-import { SlackClientModule } from './slack.client.module';
+import SlackController from './controller/slack.controller';
+import { ApiSlackService } from './services/api.slack.service';
+import { ConversationsSlackService } from './services/conversations.slack.service';
+import { UsersSlackService } from './services/users.slack.service';
+import { WebApiSlackService } from './services/webapi.slack.service';
 
 @Module({
-  imports: [SlackClientModule, SlackApiModule],
+  providers: [
+    WebApiSlackService,
+    UsersSlackService,
+    ConversationsSlackService,
+    ApiSlackService,
+  ],
+  controllers: [SlackController],
+  exports: [ApiSlackService],
 })
 export class SlackModule {}

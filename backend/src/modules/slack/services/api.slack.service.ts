@@ -1,10 +1,10 @@
-import { forwardRef, Inject, Injectable, Logger } from '@nestjs/common';
+import { Inject, Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 
 import { SLACK_MASTER_CHANNEL_ID } from 'src/libs/constants/slack';
+import { ConversationsSlackServiceInterface } from '../interfaces/services/conversations.slack.service';
+import { UsersSlackServiceInterface } from '../interfaces/services/users.slack.service';
 import { TYPES } from '../interfaces/types';
-import { ConversationsSlackService } from './conversations.slack.service';
-import { UsersSlackService } from './users.slack.service';
 
 type RetroUser = {
   email: string;
@@ -12,6 +12,7 @@ type RetroUser = {
   responsible?: boolean;
 };
 
+// Dto
 type RetroTeam = {
   name: string;
   participants: RetroUser[];
@@ -23,10 +24,10 @@ export class ApiSlackService {
 
   constructor(
     private readonly configService: ConfigService,
-    @Inject(forwardRef(() => TYPES.services.ConversationsSlackService))
-    private readonly conversationsSlackService: ConversationsSlackService,
-    @Inject(forwardRef(() => TYPES.services.UsersSlackService))
-    private readonly usersSlackService: UsersSlackService,
+    @Inject(TYPES.services.ConversationsSlackService)
+    private readonly conversationsSlackService: ConversationsSlackServiceInterface,
+    @Inject(TYPES.services.UsersSlackService)
+    private readonly usersSlackService: UsersSlackServiceInterface,
   ) {}
 
   async createChannelsForRetroTeam(_retroTeams: RetroTeam[]): Promise<void> {
