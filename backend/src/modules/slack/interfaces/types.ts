@@ -6,3 +6,14 @@ export const TYPES = {
     WebApiSlackService: 'WebApiSlackService',
   },
 };
+
+export type RetroError = {
+  message: string;
+};
+
+export type RetroUser = {
+  email: string;
+  slackId: string;
+  responsible?: boolean;
+  errors?: RetroError[];
+};

@@ -2,21 +2,10 @@ import { Inject, Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 
 import { SLACK_MASTER_CHANNEL_ID } from 'src/libs/constants/slack';
+import { RetroTeamSlackDto } from '../dto/retro-teams.slack.dto';
 import { ConversationsSlackServiceInterface } from '../interfaces/services/conversations.slack.service';
 import { UsersSlackServiceInterface } from '../interfaces/services/users.slack.service';
-import { TYPES } from '../interfaces/types';
-
-type RetroUser = {
-  email: string;
-  slackId: string;
-  responsible?: boolean;
-};
-
-// Dto
-type RetroTeam = {
-  name: string;
-  participants: RetroUser[];
-};
+import { RetroUser, TYPES } from '../interfaces/types';
 
 @Injectable()
 export class ApiSlackService {
@@ -30,7 +19,9 @@ export class ApiSlackService {
     private readonly usersSlackService: UsersSlackServiceInterface,
   ) {}
 
-  async createChannelsForRetroTeam(_retroTeams: RetroTeam[]): Promise<void> {
+  async createChannelsForRetroTeam(
+    _retroTeams: RetroTeamSlackDto[],
+  ): Promise<void> {
     const retroTeams = await this.fillRetroTeams(_retroTeams);
 
     const responsiblesList = retroTeams
@@ -44,7 +35,9 @@ export class ApiSlackService {
     await this.createChannelForEachTeam(retroTeams);
   }
 
-  private async fillRetroTeams(_retroTeams: RetroTeam[]): Promise<RetroTeam[]> {
+  private async fillRetroTeams(
+    _retroTeams: RetroTeamSlackDto[],
+  ): Promise<RetroTeamSlackDto[]> {
     const retroTeams = [..._retroTeams];
 
     const allUsersIdsOnMasterChannel =
@@ -87,7 +80,7 @@ export class ApiSlackService {
   }
 
   private async createChannelForEachTeam(
-    retroTeams: RetroTeam[],
+    retroTeams: RetroTeamSlackDto[],
   ): Promise<boolean> {
     const createChannelsPromises = retroTeams.map(({ name }) =>
       this.conversationsSlackService.createChannel({
