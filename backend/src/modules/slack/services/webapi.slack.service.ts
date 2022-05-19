@@ -19,4 +19,4 @@ export class WebApiSlackService implements WebApiSlackServiceInterface {
   }
 }
 
-export type Profile = ProfileWebApi;
+export type Profile = ProfileWebApi & { userId: string };

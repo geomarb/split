@@ -22,7 +22,7 @@ export class UsersSlackService implements UsersSlackServiceInterface {
           user: userId,
         });
 
-      return profile || {};
+      return { ...profile, userId } || {};
     } catch (error) {
       this.logger.error(error);
 
@@ -36,7 +36,10 @@ export class UsersSlackService implements UsersSlackServiceInterface {
 
       // eslint-disable-next-line no-restricted-syntax
       for await (const id of usersIds) {
-        profiles.push(await this.getProfileById(id));
+        const profile = await this.getProfileById(id);
+        if (typeof profile === 'object' && profile.userId) {
+          profiles.push(profile);
+        }
       }
 
       return profiles;
