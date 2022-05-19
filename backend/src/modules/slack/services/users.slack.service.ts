@@ -1,5 +1,4 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
 import { UsersSlackServiceInterface } from '../interfaces/services/users.slack.service';
 import { TYPES } from '../interfaces/types';
 import { Profile, WebApiSlackService } from './webapi.slack.service';
@@ -9,7 +8,6 @@ export class UsersSlackService implements UsersSlackServiceInterface {
   private logger = new Logger(UsersSlackService.name);
 
   constructor(
-    private readonly configService: ConfigService,
     @Inject(TYPES.services.WebApiSlackService)
     private readonly webApiSlackService: WebApiSlackService,
   ) {}
