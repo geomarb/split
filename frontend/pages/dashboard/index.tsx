@@ -15,7 +15,9 @@ import { getDashboardHeaderInfo } from "../../api/authService";
 const RecentRetros = lazy(() => import("../../components/Dashboard/RecentRetros/RecentRetros"));
 const Tiles = lazy(() => import("../../components/Dashboard/Tiles"));
 
-const InnerContainer = styled(Flex, { mt: "$40" });
+const InnerContainer = styled(Flex, {
+  overflow: "hidden",
+});
 
 export const getServerSideProps: GetServerSideProps = requireAuthentication(
   async (context: GetServerSidePropsContext) => {

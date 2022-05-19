@@ -1,11 +1,12 @@
 import React, { useMemo, useRef } from "react";
 import { TailSpin } from "react-loader-spinner";
 import { InfiniteData, UseInfiniteQueryResult } from "react-query";
-import BoardType from "../../../types/board/board";
-import Flex from "../../Primitives/Flex";
-import Text from "../../Primitives/Text";
-import CardBody from "../../CardBoard/CardBody/CardBody";
-import { styled } from "../../../stitches.config";
+import BoardType from "../../../../types/board/board";
+import Flex from "../../../Primitives/Flex";
+import Text from "../../../Primitives/Text";
+import CardBody from "../../../CardBoard/CardBody/CardBody";
+import { styled } from "../../../../stitches.config";
+import { ListContainer } from "./styles";
 
 const LastUpdatedText = styled(Text, {
   position: "sticky",
@@ -59,14 +60,7 @@ const ListOfCards = React.memo<ListOfCardsProp>(({ data, userId, fetchBoards, is
   };
 
   return (
-    <Flex
-      ref={scrollRef}
-      onScroll={onScroll}
-      css={{ mt: "$24", height: "100%", pr: "$20" }}
-      justify="start"
-      direction="column"
-      gap="24"
-    >
+    <ListContainer ref={scrollRef} onScroll={onScroll} justify="start" direction="column" gap="24">
       {Array.from(boardsSplitedByDay).map(([date, splitedBoard]) => {
         const formatedDate = new Date(date).toLocaleDateString("en-US", {
           weekday: "long",
@@ -96,7 +90,7 @@ const ListOfCards = React.memo<ListOfCardsProp>(({ data, userId, fetchBoards, is
       <Flex css={{ width: "100%", "& svg": { color: "black" } }} justify="center">
         {isLoading && <TailSpin color="#060D16" height={60} width={60} />}
       </Flex>
-    </Flex>
+    </ListContainer>
   );
 });
 

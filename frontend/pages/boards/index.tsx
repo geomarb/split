@@ -4,7 +4,6 @@ import { dehydrate, QueryClient } from "react-query";
 import { useSession } from "next-auth/react";
 import { TailSpin } from "react-loader-spinner";
 import { styled } from "../../stitches.config";
-import Layout from "../../components/Layout/Layout";
 import Flex from "../../components/Primitives/Flex";
 import Text from "../../components/Primitives/Text";
 import Separator from "../../components/Primitives/Separator";
@@ -12,6 +11,7 @@ import MyBoards from "../../components/Boards/MyBoards";
 import { getBoardsRequest } from "../../api/boardService";
 import requireAuthentication from "../../components/HOC/requireAuthentication";
 import QueryError from "../../components/Errors/QueryError";
+import Layout from "../../components/Layout/Layout";
 
 const StyledTextTab = styled(Text, {
   pb: "$12 !important",

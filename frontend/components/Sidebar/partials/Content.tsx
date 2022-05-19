@@ -3,9 +3,9 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { signOut } from "next-auth/react";
-import { styled } from "../../stitches.config";
-import Text from "../Primitives/Text";
-import Flex from "../Primitives/Flex";
+import { styled } from "../../../stitches.config";
+import Text from "../../Primitives/Text";
+import Flex from "../../Primitives/Flex";
 import {
   ACCOUNT_ROUTE,
   BOARDS_ROUTE,
@@ -14,9 +14,9 @@ import {
   START_PAGE_ROUTE,
   TEAMS_ROUTE,
   USERS_ROUTE,
-} from "../../utils/routes";
+} from "../../../utils/routes";
 import Separator from "./Separator";
-import Icon from "../icons/Icon";
+import Icon from "../../icons/Icon";
 
 const StyledMenuItem = styled(Flex, {
   pl: "$22",
