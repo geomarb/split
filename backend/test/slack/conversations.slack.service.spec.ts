@@ -1,3 +1,4 @@
+import { Test, TestingModule } from '@nestjs/testing';
 import { ConfigService } from '@nestjs/config';
 import {
   ConversationsCreateArguments,
@@ -7,14 +8,15 @@ import {
 import { faker } from '@faker-js/faker';
 
 import configService from '../../src/libs/test-utils/mocks/configService.mock';
-import { WebApiSlackServiceInterface } from '../../src/modules/slack/interfaces/services/webapi.slack.service';
 import { ConversationsSlackService } from '../../src/modules/slack/services/conversations.slack.service';
 import { CreateChannelDto } from '../../src/modules/slack/dto/create.channel.slack.dto';
+import { webApiSlackService } from '../../src/modules/slack/slack.providers';
 
 const slackUsersIds = ['U023BECGF', 'U061F7AUR', 'W012A3CDE'];
 
-const webApiSlackService = {
-  getClient() {
+jest.mock('@slack/web-api', () => ({
+  // eslint-disable-next-line object-shorthand
+  WebClient: function WebClient() {
     return {
       conversations: {
         create(options?: ConversationsCreateArguments | undefined) {
@@ -47,31 +49,29 @@ const webApiSlackService = {
       },
     };
   },
-};
+}));
 
 describe('ConversationsSlackService', () => {
   let service: ConversationsSlackService;
 
   beforeAll(async () => {
-    /* const module: TestingModule = await Test.createTestingModule({
+    const module: TestingModule = await Test.createTestingModule({
       providers: [
+        ConfigService,
         {
           provide: ConfigService,
           useValue: configService,
         },
-        {
-          provide: WebApiSlackService,
-          useValue: webApiSlackService,
-        },
+        webApiSlackService,
         ConversationsSlackService,
       ],
     }).compile();
 
-    service = module.get<ConversationsSlackService>(ConversationsSlackService); */
-    service = new ConversationsSlackService(
+    service = module.get<ConversationsSlackService>(ConversationsSlackService);
+    /* service = new ConversationsSlackService(
       configService as unknown as ConfigService<Record<string, unknown>, false>,
       webApiSlackService as unknown as WebApiSlackServiceInterface,
-    );
+    ); */
   });
 
   it('should be defined', () => {
