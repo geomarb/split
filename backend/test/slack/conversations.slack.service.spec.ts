@@ -3,7 +3,6 @@ import {
   ConversationsCreateArguments,
   ConversationsInviteArguments,
   ConversationsMembersArguments,
-  UsersProfileGetArguments,
 } from '@slack/web-api';
 import { faker } from '@faker-js/faker';
 
@@ -17,19 +16,6 @@ const slackUsersIds = ['U023BECGF', 'U061F7AUR', 'W012A3CDE'];
 const webApiSlackService = {
   getClient() {
     return {
-      users: {
-        profile: {
-          // eslint-disable-next-line @typescript-eslint/no-unused-vars
-          get(options?: UsersProfileGetArguments | undefined) {
-            return Promise.resolve({
-              ok: true,
-              profile: {
-                email: 'spengler@ghostbusters.example.com',
-              },
-            });
-          },
-        },
-      },
       conversations: {
         create(options?: ConversationsCreateArguments | undefined) {
           return Promise.resolve({
