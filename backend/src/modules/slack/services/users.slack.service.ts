@@ -48,38 +48,4 @@ export class UsersSlackService implements UsersSlackServiceInterface {
       throw error;
     }
   }
-
-  async getEmailById(userId: string): Promise<string> {
-    try {
-      // https://api.slack.com/methods/users.profile.get
-      const { profile } = await this.webApiSlackService
-        .getClient()
-        .users.profile.get({
-          user: userId,
-        });
-
-      return profile?.email || '';
-    } catch (error) {
-      this.logger.error(error);
-
-      throw error;
-    }
-  }
-
-  async getEmailsByIds(usersIds: string[]): Promise<Record<string, string>[]> {
-    try {
-      const idsEmails = {} as Record<string, string>[];
-
-      // eslint-disable-next-line no-restricted-syntax
-      for await (const id of usersIds) {
-        idsEmails[id] = await this.getEmailById(id);
-      }
-
-      return idsEmails;
-    } catch (error) {
-      this.logger.error(error);
-
-      throw error;
-    }
-  }
 }
