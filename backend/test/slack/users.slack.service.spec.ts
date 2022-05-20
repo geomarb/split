@@ -1,7 +1,10 @@
+import { Test, TestingModule } from '@nestjs/testing';
+import { ConfigService } from '@nestjs/config';
 import { UsersProfileGetArguments } from '@slack/web-api';
 
-import { WebApiSlackService } from '../../src/modules/slack/services/webapi.slack.service';
+import configService from '../../src/libs/test-utils/mocks/configService.mock';
 import { UsersSlackService } from '../../src/modules/slack/services/users.slack.service';
+import { webApiSlackService } from '../../src/modules/slack/slack.providers';
 
 const usersIdsAndEmails = [
   {
@@ -17,8 +20,10 @@ const usersIdsAndEmails = [
     email: 'email_id_3@test.com',
   },
 ];
-const webApiSlackService = {
-  getClient() {
+
+jest.mock('@slack/web-api', () => ({
+  // eslint-disable-next-line object-shorthand
+  WebClient: function WebClient() {
     return {
       users: {
         profile: {
@@ -36,33 +41,25 @@ const webApiSlackService = {
       },
     };
   },
-};
+}));
 
 describe('UsersSlackService', () => {
   let service: UsersSlackService;
 
   beforeAll(async () => {
-    /* const module: TestingModule = await Test.createTestingModule({
+    const module: TestingModule = await Test.createTestingModule({
       providers: [
         ConfigService,
         {
           provide: ConfigService,
           useValue: configService,
         },
-        WebApiSlackService,
-        {
-          provide: WebApiSlackService,
-          useValue: webApiSlackService,
-        },
+        webApiSlackService,
         UsersSlackService,
       ],
     }).compile();
 
-    service = module.get<UsersSlackService>(UsersSlackService); */
-
-    service = new UsersSlackService(
-      webApiSlackService as unknown as WebApiSlackService,
-    );
+    service = module.get<UsersSlackService>(UsersSlackService);
   });
 
   it('should be defined', () => {
