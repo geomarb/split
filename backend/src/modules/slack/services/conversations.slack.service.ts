@@ -1,6 +1,6 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { SLACK_CHANNEL_PREFIX } from 'src/libs/constants/slack';
+import { SLACK_CHANNEL_PREFIX } from '../../../libs/constants/slack';
 import { CreateChannelDto } from '../dto/create.channel.slack.dto';
 import { ConversationsSlackServiceInterface } from '../interfaces/services/conversations.slack.service';
 import { WebApiSlackServiceInterface } from '../interfaces/services/webapi.slack.service';
@@ -18,7 +18,9 @@ export class ConversationsSlackService
     private readonly webApiSlackService: WebApiSlackServiceInterface,
   ) {}
 
-  async createChannel(createChannelDto: CreateChannelDto): Promise<string> {
+  async createChannel(
+    createChannelDto: CreateChannelDto,
+  ): Promise<{ name: string; id: string }> {
     try {
       const today = new Date();
 
@@ -31,7 +33,10 @@ export class ConversationsSlackService
           }-${today.getMonth() + 1}-${today.getFullYear()}`,
         });
 
-      return channel?.id || '';
+      return {
+        id: channel?.id || '',
+        name: channel?.name || '',
+      };
     } catch (error) {
       this.logger.error(error);
 

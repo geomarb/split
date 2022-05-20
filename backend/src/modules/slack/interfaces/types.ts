@@ -13,7 +13,7 @@ export type RetroError = {
 
 export type RetroUser = {
   email: string;
-  slackId: string;
+  slackId?: string;
   responsible?: boolean;
   errors?: RetroError[];
 };
