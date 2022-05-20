@@ -3,7 +3,7 @@ import { ConfigService } from '@nestjs/config';
 import { WebClient } from '@slack/web-api';
 import { Profile as ProfileWebApi } from '@slack/web-api/dist/response/UsersProfileGetResponse';
 
-import { SLACK_API_BOT_TOKEN } from 'src/libs/constants/slack';
+import { SLACK_API_BOT_TOKEN } from '../../../libs/constants/slack';
 import { WebApiSlackServiceInterface } from '../interfaces/services/webapi.slack.service';
 
 @Injectable()

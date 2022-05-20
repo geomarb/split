@@ -1,7 +1,7 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 
-import { SLACK_MASTER_CHANNEL_ID } from 'src/libs/constants/slack';
+import { SLACK_MASTER_CHANNEL_ID } from '../../../libs/constants/slack';
 import { RetroTeamSlackDto } from '../dto/retro-teams.slack.dto';
 import { ConversationsSlackServiceInterface } from '../interfaces/services/conversations.slack.service';
 import { UsersSlackServiceInterface } from '../interfaces/services/users.slack.service';
@@ -66,14 +66,17 @@ export class ApiSlackService {
   private async createChannelForResponsibles(
     responsiblesList: RetroUser[],
   ): Promise<boolean> {
-    const channelId = await this.conversationsSlackService.createChannel({
-      name: 'responsibles',
-    });
+    const { id: channelId } =
+      await this.conversationsSlackService.createChannel({
+        name: 'responsibles',
+      });
 
     const inviteResponsiblesSuccess =
       await this.conversationsSlackService.inviteUsersToChannel(
         channelId,
-        responsiblesList.map((r) => r.slackId),
+        responsiblesList
+          .filter((r) => typeof r.slackId === 'string')
+          .map((r) => r.slackId as string),
       );
 
     return inviteResponsiblesSuccess;
@@ -93,8 +96,10 @@ export class ApiSlackService {
     const inviteUsersPromises = retroTeams.reduce((acc, item, idx) => {
       acc.push(
         this.conversationsSlackService.inviteUsersToChannel(
-          createdChannels[idx],
-          item.participants.map((p) => p.slackId),
+          createdChannels[idx].id,
+          item.participants
+            .filter((r) => typeof r.slackId === 'string')
+            .map((p) => p.slackId as string),
         ),
       );
 
