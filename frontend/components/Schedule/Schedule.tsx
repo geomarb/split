@@ -1,7 +1,6 @@
 import React from "react";
-import { useForm, Controller } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import Select from "react-select";
 import BpCheckbox from "../Primitives/CheckBox";
 import AlertBox from "../Primitives/AlertBox";
 import SelectBox from "../Primitives/Select";
@@ -11,33 +10,6 @@ import Flex from "../Primitives/Flex";
 import { styled } from "../../stitches.config";
 import DatePickerBox from "../Primitives/DatePicker";
 import SchemaSelectForm from "../../schema/schemaSelectForm";
-
-const hourOptions = [
-  { value: "00:00 AM", label: "00:00 AM" },
-  { value: "01:00 AM", label: "01:00 AM", color: "#00B8D9" },
-  { value: "02:00 AM", label: "02:00 AM", color: "#00B8D9" },
-  { value: "03:00 AM", label: "03:00 AM", color: "#00B8D9" },
-  { value: "04:00 AM", label: "04:00 AM", color: "#00B8D9" },
-  { value: "05:00 AM", label: "05:00 AM", color: "#00B8D9" },
-  { value: "06:00 AM", label: "06:00 AM", color: "#00B8D9" },
-  { value: "07:00 AM", label: "07:00 AM", color: "#00B8D9" },
-  { value: "08:00 AM", label: "08:00 AM", color: "#00B8D9" },
-  { value: "09:00 AM", label: "09:00 AM", color: "#00B8D9" },
-  { value: "10:00 AM", label: "10:00 AM", color: "#00B8D9" },
-  { value: "11:00 AM", label: "11:00 AM", color: "#00B8D9" },
-  { value: "12:00 AM", label: "12:00 AM", color: "#00B8D9" },
-  { value: "13:00 PM", label: "13:00 PM", color: "#00B8D9" },
-  { value: "14:00 PM", label: "14:00 PM", color: "#00B8D9" },
-  { value: "15:00 PM", label: "15:00 PM", color: "#00B8D9" },
-  { value: "16:00 PM", label: "16:00 PM", color: "#00B8D9" },
-  { value: "17:00 PM", label: "17:00 PM", color: "#00B8D9" },
-  { value: "18:00 PM", label: "18:00 PM", color: "#00B8D9" },
-  { value: "19:00 PM", label: "19:00 PM", color: "#00B8D9" },
-  { value: "20:00 PM", label: "20:00 PM", color: "#00B8D9" },
-  { value: "21:00 PM", label: "21:00 PM", color: "#00B8D9" },
-  { value: "22:00 PM", label: "22:00 PM", color: "#00B8D9" },
-  { value: "23:00 PM", label: "23:00 PM", color: "#00B8D9" },
-];
 
 const StyledForm = styled("form", Flex, { width: "100%" });
 
@@ -86,12 +58,12 @@ const EndContainer = styled(Flex, {
 
 const Schedule: React.FC = () => {
   const { register, getValues, handleSubmit, control } = useForm<{
-    1: string;
-    2: string;
-    3: string;
-    4: string;
-    5: string;
-    6: string;
+    1: { value: string; label: string };
+    2: { value: string; label: string };
+    3: { value: string; label: string };
+    4: { value: string; label: string };
+    5: { value: string; label: string };
+    6?: { value: string; label: string };
   }>({
     mode: "onSubmit",
     reValidateMode: "onSubmit",
@@ -134,11 +106,16 @@ const Schedule: React.FC = () => {
                 control={control}
                 name="1"
                 defaultValue=""
-                render={({ field }) => <Select {...field} options={hourOptions} />}
+                render={({ field }) => <SelectBox {...field} type="hour" title={"From"} />}
               />
             </Flex>
             <Flex css={{ width: "252px" }}>
-              <SelectBox type="hour" title="To" {...register("2")} />
+              <Controller
+                control={control}
+                name="2"
+                defaultValue=""
+                render={({ field }) => <SelectBox {...field} type="hour" title="To" />}
+              />
             </Flex>
           </Flex>
           <Seperator />
@@ -151,7 +128,14 @@ const Schedule: React.FC = () => {
           <Flex css={{ alignItems: "center", marginBottom: "", marginTop: "$12" }}>
             <BpCheckbox />
             <Flex css={{ maxWidth: "236px", marginRight: "16px" }}>
-              <SelectBox type="days" title="Select time range" {...register("3")} />
+              <Controller
+                control={control}
+                name="3"
+                defaultValue=""
+                render={({ field }) => (
+                  <SelectBox {...field} type="days" title={"Select time range"} />
+                )}
+              />
             </Flex>
             <Flex css={{ maxWidth: "236px" }}>
               <SelectBox type="times" title="Select time unit" {...register("4")} />
