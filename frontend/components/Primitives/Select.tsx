@@ -2,12 +2,13 @@ import React from "react";
 import Select, { components } from "react-select";
 import { styled } from "../../stitches.config";
 
-interface SelectBoxProps {
+type SelectBoxProps = HTMLElement<HTMLSelectElement> & {
   // eslint-disable-next-line react/require-default-props
   title?: string;
   // eslint-disable-next-line react/require-default-props
   type?: "hour" | "times" | "timesBefore" | "days";
-}
+};
+
 const { ValueContainer, Placeholder } = components;
 
 // const [hourOptions, sethourOptions] = useState("");
@@ -151,7 +152,7 @@ const StyledSelect = styled(Select, {
   },
 });
 
-const SelectBox: React.FC<SelectBoxProps> = ({ type, title }) => {
+const SelectBox: React.FC<SelectBoxProps> = ({ type, title, ...props }) => {
   const getSelectOption = () => {
     if (type === "hour") return hourOptions;
     if (type === "times") return timesOptions;
@@ -159,17 +160,13 @@ const SelectBox: React.FC<SelectBoxProps> = ({ type, title }) => {
     return daysOptions;
   };
 
-  const tryThis = getSelectOption();
-
   return (
     <StyledSelect
-      // value={tryThis.find((obj) => selectedValue[0].value.includes(obj.value))} // set selected value
-      options={tryThis} // set list of the data
-      onChange={(evt) => console.log(evt)}
+      {...props}
+      options={getSelectOption()} // set list of the data
       components={{
         ValueContainer: CustomValueContainer,
       }}
-      // eslint-disable-next-line react/jsx-no-duplicate-props
       placeholder={title}
       styles={{
         input: (provided) => ({
