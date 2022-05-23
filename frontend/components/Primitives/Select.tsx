@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import Select, { components } from "react-select";
 import { styled } from "../../stitches.config";
 
@@ -152,12 +152,6 @@ const StyledSelect = styled(Select, {
 });
 
 const SelectBox: React.FC<SelectBoxProps> = ({ type, title }) => {
-  // eslint-disable-next-line @typescript-eslint/no-shadow
-
-  const [selectedValue] = useState([{ value: [] }]);
-
-  // handle onChange event of the dropdown
-
   const getSelectOption = () => {
     if (type === "hour") return hourOptions;
     if (type === "times") return timesOptions;
@@ -168,60 +162,49 @@ const SelectBox: React.FC<SelectBoxProps> = ({ type, title }) => {
   const tryThis = getSelectOption();
 
   return (
-    <>
-      <StyledSelect
-        // value={tryThis.find((obj) => selectedValue[0].value.includes(obj.value))} // set selected value
-        options={tryThis} // set list of the data
-        onChange={(evt) => console.log(evt)}
-        components={{
-          ValueContainer: CustomValueContainer,
-        }}
-        // eslint-disable-next-line react/jsx-no-duplicate-props
-        placeholder={title}
-        styles={{
-          input: (provided) => ({
-            ...provided,
-            height: "56px",
-            marginBottom: 0,
-            boxSizing: "border-box",
-          }),
-          container: (provided) => ({
-            ...provided,
-            marginTop: 0,
-            width: "252px",
-            boxSizing: "border-box",
-            height: "56px",
-          }),
-          valueContainer: (provided) => ({
-            ...provided,
-            overflow: "visible",
-            height: "56px",
-          }),
-          placeholder: (provided, state) => ({
-            ...provided,
-            position: "absolute",
-            top: state.hasValue || state.selectProps.inputValue ? 0 : "30%",
-            transition: "top 0.1s, font-size 0.1s",
-            fontSize: (state.hasValue || state.selectProps.inputValue) && 16,
-          }),
-          singleValue: (provided) => ({
-            ...provided,
+    <StyledSelect
+      // value={tryThis.find((obj) => selectedValue[0].value.includes(obj.value))} // set selected value
+      options={tryThis} // set list of the data
+      onChange={(evt) => console.log(evt)}
+      components={{
+        ValueContainer: CustomValueContainer,
+      }}
+      // eslint-disable-next-line react/jsx-no-duplicate-props
+      placeholder={title}
+      styles={{
+        input: (provided) => ({
+          ...provided,
+          height: "56px",
+          marginBottom: 0,
+          boxSizing: "border-box",
+        }),
+        container: (provided) => ({
+          ...provided,
+          marginTop: 0,
+          width: "252px",
+          boxSizing: "border-box",
+          height: "56px",
+        }),
+        valueContainer: (provided) => ({
+          ...provided,
+          overflow: "visible",
+          height: "56px",
+        }),
+        placeholder: (provided, state) => ({
+          ...provided,
+          position: "absolute",
+          top: state.hasValue || state.selectProps.inputValue ? 0 : "30%",
+          transition: "top 0.1s, font-size 0.1s",
+          fontSize: (state.hasValue || state.selectProps.inputValue) && 16,
+        }),
+        singleValue: (provided) => ({
+          ...provided,
 
-            marginTop: 20,
-            height: "56px",
-          }),
-        }}
-      />
-      <div>
-        {selectedValue && (
-          <div style={{ marginTop: 20, lineHeight: "25px" }}>
-            <div>
-              <b>Selected Value: </b> {JSON.stringify(selectedValue, null, 2)}
-            </div>
-          </div>
-        )}
-      </div>
-    </>
+          marginTop: 20,
+          height: "56px",
+        }),
+      }}
+    />
   );
 };
 
