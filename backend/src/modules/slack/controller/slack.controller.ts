@@ -26,16 +26,6 @@ export default class SlackController {
     );
   }
 
-  @Get('/members/email')
-  async fetchMembersEmailsChannel() {
-    const usersIds =
-      await this.conversationsSlackService.fetchMembersFromChannelSlowly(
-        'C03E6SA065Q', // 'C03F4NNLKCJ',
-      );
-
-    return this.usersSlackService.getEmailsByIds(usersIds);
-  }
-
   @Get('/profiles')
   async fetchProfilesChannel() {
     const usersIds =
