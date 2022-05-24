@@ -55,14 +55,6 @@ jest.mock('@slack/web-api', () => ({
   },
 }));
 
-/* jest.mock('@nestjs/common', () => ({
-  ...jest.requireActual('@nestjs/common'),
-  // eslint-disable-next-line @typescript-eslint/no-shadow
-  Logger: function Logger() {
-    return { error: () => {} };
-  },
-})); */
-
 describe('ConversationsSlackService', () => {
   let service: ConversationsSlackService;
 
