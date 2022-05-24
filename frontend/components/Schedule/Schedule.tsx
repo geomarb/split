@@ -57,7 +57,7 @@ const EndContainer = styled(Flex, {
 });
 
 const Schedule: React.FC = () => {
-  const { register, getValues, handleSubmit, control } = useForm<{
+  const { getValues, handleSubmit, control } = useForm<{
     1: { value: string; label: string };
     2: { value: string; label: string };
     3: { value: string; label: string };
@@ -106,7 +106,7 @@ const Schedule: React.FC = () => {
                 control={control}
                 name="1"
                 defaultValue=""
-                render={({ field }) => <SelectBox {...field} type="hour" title={"From"} />}
+                render={({ field }) => <SelectBox {...field} type="hour" title="From" />}
               />
             </Flex>
             <Flex css={{ width: "252px" }}>
@@ -133,12 +133,19 @@ const Schedule: React.FC = () => {
                 name="3"
                 defaultValue=""
                 render={({ field }) => (
-                  <SelectBox {...field} type="days" title={"Select time range"} />
+                  <SelectBox {...field} type="days" title="Select time range" />
                 )}
               />
             </Flex>
             <Flex css={{ maxWidth: "236px" }}>
-              <SelectBox type="times" title="Select time unit" {...register("4")} />
+              <Controller
+                control={control}
+                name="4"
+                defaultValue=""
+                render={({ field }) => (
+                  <SelectBox {...field} type="days" title="Select time range" />
+                )}
+              />
             </Flex>
           </Flex>
           <Flex direction="column" css={{ marginLeft: "32px", marginTop: "7px" }}>
@@ -169,10 +176,24 @@ const Schedule: React.FC = () => {
           <Flex css={{ alignItems: "center", marginBottom: "9px" }}>
             <BpCheckbox />
             <Flex css={{ maxWidth: "236px", marginRight: "16px" }}>
-              <SelectBox type="days" title="Select time range" {...register("5")} />
+              <Controller
+                control={control}
+                name="5"
+                defaultValue=""
+                render={({ field }) => (
+                  <SelectBox {...field} type="days" title="Select time range" />
+                )}
+              />
             </Flex>
             <Flex css={{ maxWidth: "236px" }}>
-              <SelectBox type="timesBefore" title="Select time unit" {...register("6")} />
+              <Controller
+                control={control}
+                name="6"
+                defaultValue=""
+                render={({ field }) => (
+                  <SelectBox {...field} type="days" title="Select time range" />
+                )}
+              />
             </Flex>
           </Flex>
           <Flex direction="column" css={{ marginLeft: "32px" }}>
