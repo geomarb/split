@@ -1,4 +1,4 @@
-import { Logger as LoggerNestJs } from '@nestjs/common';
+import { Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Test, TestingModule } from '@nestjs/testing';
 import {
@@ -88,7 +88,7 @@ describe('ApiSlackService', () => {
     }).compile();
 
     service = module.get<ApiSlackService>(ApiSlackService);
-    jest.spyOn(LoggerNestJs.prototype, 'error').mockImplementation(jest.fn);
+    jest.spyOn(Logger.prototype, 'error').mockImplementation(jest.fn);
   });
 
   it('should be defined', () => {
