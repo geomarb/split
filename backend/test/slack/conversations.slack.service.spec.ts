@@ -1,4 +1,4 @@
-import { Logger as LoggerNestJs } from '@nestjs/common';
+import { Logger } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { ConfigService } from '@nestjs/config';
 import {
@@ -55,6 +55,27 @@ jest.mock('@slack/web-api', () => ({
   },
 }));
 
+const WebClientMockError: any = function WebClient() {
+  return {
+    conversations: {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      create(options?: ConversationsCreateArguments | undefined) {
+        return Promise.reject(new Error('some error message'));
+      },
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      invite(options?: ConversationsInviteArguments | undefined) {
+        return Promise.reject(new Error('some error message'));
+      },
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      members(options?: ConversationsMembersArguments | undefined) {
+        return Promise.reject(new Error('some error message'));
+      },
+    },
+  };
+};
+
+const LoggerErrorMock = jest.fn();
+
 describe('ConversationsSlackService', () => {
   let service: ConversationsSlackService;
 
@@ -72,8 +93,7 @@ describe('ConversationsSlackService', () => {
     }).compile();
 
     service = module.get<ConversationsSlackService>(ConversationsSlackService);
-
-    jest.spyOn(LoggerNestJs.prototype, 'error').mockImplementation(jest.fn);
+    jest.spyOn(Logger.prototype, 'error').mockImplementation(jest.fn);
   });
 
   it('should be defined', () => {
@@ -93,85 +113,6 @@ describe('ConversationsSlackService', () => {
     ).toBe(true);
   });
 
-  it('should throws the slack api error if it fails', async () => {
-    const input: CreateChannelDto = {
-      name: 'test',
-    };
-
-    const WebClientMock: any = function WebClient() {
-      return {
-        conversations: {
-          // eslint-disable-next-line @typescript-eslint/no-unused-vars
-          create(options?: ConversationsCreateArguments | undefined) {
-            return Promise.reject(new Error('some error message'));
-          },
-        },
-      };
-    };
-
-    jest
-      .spyOn(WebClientSlackApi, 'WebClient')
-      .mockImplementationOnce(WebClientMock);
-
-    const serviceWithWebClientMock = new ConversationsSlackService(
-      configService as unknown as ConfigService<Record<string, unknown>, false>,
-      new WebApiSlackService(
-        configService as unknown as ConfigService<
-          Record<string, unknown>,
-          false
-        >,
-      ) as unknown as WebApiSlackServiceInterface,
-    );
-
-    await expect(
-      serviceWithWebClientMock.createChannel(input),
-    ).rejects.toThrowError();
-  });
-
-  it('should call logger if slack api throwns an error', async () => {
-    const input: CreateChannelDto = {
-      name: 'test',
-    };
-
-    const WebClientMock: any = function WebClient() {
-      return {
-        conversations: {
-          // eslint-disable-next-line @typescript-eslint/no-unused-vars
-          create(options?: ConversationsCreateArguments | undefined) {
-            return Promise.reject(new Error('some error message'));
-          },
-        },
-      };
-    };
-
-    jest
-      .spyOn(WebClientSlackApi, 'WebClient')
-      .mockImplementationOnce(WebClientMock);
-
-    const serviceWithWebClientMock = new ConversationsSlackService(
-      configService as unknown as ConfigService<Record<string, unknown>, false>,
-      new WebApiSlackService(
-        configService as unknown as ConfigService<
-          Record<string, unknown>,
-          false
-        >,
-      ) as unknown as WebApiSlackServiceInterface,
-    );
-
-    const LoggerErrorMock = jest.fn();
-    const spy = jest
-      .spyOn(LoggerNestJs.prototype, 'error')
-      .mockImplementation(LoggerErrorMock);
-
-    try {
-      await serviceWithWebClientMock.createChannel(input);
-    } catch (err) {
-      expect(LoggerErrorMock).toBeCalledTimes(1);
-    }
-
-    spy.mockRestore();
-  });
-
   it('should invite users to channel and returns ok if no erros', async () => {
     const channelId = 'C_any_id';
     const usersIds = ['U_1', 'U_2', 'U_3'];
@@ -187,5 +128,97 @@ describe('ConversationsSlackService', () => {
     const result = await service.fetchMembersFromChannelSlowly(channelId);
 
     expect(result).toMatchObject(slackUsersIds);
+  });
+
+  describe('- throw Errors', () => {
+    let serviceWithWebClientMock: ConversationsSlackService;
+
+    beforeEach(() => {
+      jest
+        .spyOn(WebClientSlackApi, 'WebClient')
+        .mockImplementationOnce(WebClientMockError);
+
+      serviceWithWebClientMock = new ConversationsSlackService(
+        configService as unknown as ConfigService<
+          Record<string, unknown>,
+          false
+        >,
+        new WebApiSlackService(
+          configService as unknown as ConfigService<
+            Record<string, unknown>,
+            false
+          >,
+        ) as unknown as WebApiSlackServiceInterface,
+      );
+
+      jest.spyOn(Logger.prototype, 'error').mockImplementation(LoggerErrorMock);
+    });
+
+    afterEach(() => {
+      LoggerErrorMock.mockRestore();
+    });
+
+    it('should throws the slack api error if it fails for createChannel', async () => {
+      const input: CreateChannelDto = {
+        name: 'test',
+      };
+
+      await expect(
+        serviceWithWebClientMock.createChannel(input),
+      ).rejects.toThrowError();
+    });
+
+    it('should throws the slack api error if it fails for inviteUsersToChannel', async () => {
+      const channelId = 'C_any_id';
+      const usersIds = ['U_1', 'U_2', 'U_3'];
+
+      await expect(
+        serviceWithWebClientMock.inviteUsersToChannel(channelId, usersIds),
+      ).rejects.toThrowError();
+    });
+
+    it('should throws the slack api error if it fails for fetchMembersFromChannelSlowly', async () => {
+      const channelId = 'C_any_id';
+
+      await expect(
+        serviceWithWebClientMock.fetchMembersFromChannelSlowly(channelId),
+      ).rejects.toThrowError();
+    });
+
+    it('should call logger if slack api throwns an error for createChannel', async () => {
+      const input: CreateChannelDto = {
+        name: 'test',
+      };
+
+      try {
+        await serviceWithWebClientMock.createChannel(input);
+      } catch (err) {
+        expect(LoggerErrorMock).toBeCalledTimes(1);
+      }
+    });
+
+    it('should call logger if slack api throwns an error for inviteUsersToChannel', async () => {
+      const channelId = 'C_any_id';
+      const usersIds = ['U_1', 'U_2', 'U_3'];
+
+      try {
+        await serviceWithWebClientMock.inviteUsersToChannel(
+          channelId,
+          usersIds,
+        );
+      } catch (err) {
+        expect(LoggerErrorMock).toBeCalledTimes(1);
+      }
+    });
+
+    it('should call logger if slack api throwns an error for fetchMembersFromChannelSlowly', async () => {
+      const channelId = 'C_any_id';
+
+      try {
+        await serviceWithWebClientMock.fetchMembersFromChannelSlowly(channelId);
+      } catch (err) {
+        expect(LoggerErrorMock).toBeCalledTimes(1);
+      }
+    });
   });
 });

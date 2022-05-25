@@ -1,3 +1,4 @@
+import { Logger as LoggerNestJs } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Test, TestingModule } from '@nestjs/testing';
 import {
@@ -67,7 +68,7 @@ const webApiSlackServiceMock = {
 describe('ApiSlackService', () => {
   let service: ApiSlackService;
 
-  beforeEach(async () => {
+  beforeAll(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         ConfigService,
@@ -87,6 +88,7 @@ describe('ApiSlackService', () => {
     }).compile();
 
     service = module.get<ApiSlackService>(ApiSlackService);
+    jest.spyOn(LoggerNestJs.prototype, 'error').mockImplementation(jest.fn);
   });
 
   it('should be defined', () => {

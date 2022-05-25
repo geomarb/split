@@ -1,4 +1,4 @@
-import { Logger as LoggerNestJs } from '@nestjs/common';
+import { Logger } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { ConfigService } from '@nestjs/config';
 import { UsersProfileGetArguments } from '@slack/web-api';
@@ -60,6 +60,8 @@ const WebClientMockError: any = function WebClient() {
   };
 };
 
+const LoggerErrorMock = jest.fn();
+
 describe('UsersSlackService', () => {
   let service: UsersSlackService;
 
@@ -77,7 +79,7 @@ describe('UsersSlackService', () => {
     }).compile();
 
     service = module.get<UsersSlackService>(UsersSlackService);
-    jest.spyOn(LoggerNestJs.prototype, 'error').mockImplementation(jest.fn);
+    jest.spyOn(Logger.prototype, 'error').mockImplementation(jest.fn);
   });
 
   it('should be defined', () => {
@@ -92,57 +94,46 @@ describe('UsersSlackService', () => {
     expect(result).toMatchObject(usersIdsAndEmails);
   });
 
-  it('should throws the slack api error if it fails', async () => {
-    const usersIds = usersIdsAndEmails.map((i) => i.userId);
+  describe('- throw Errors', () => {
+    let serviceWithWebClientMock: UsersSlackService;
 
-    const spy = jest
-      .spyOn(WebClientSlackApi, 'WebClient')
-      .mockImplementationOnce(WebClientMockError);
+    beforeEach(() => {
+      jest
+        .spyOn(WebClientSlackApi, 'WebClient')
+        .mockImplementationOnce(WebClientMockError);
 
-    const serviceWithWebClientMock = new UsersSlackService(
-      new WebApiSlackService(
-        configService as unknown as ConfigService<
-          Record<string, unknown>,
-          false
-        >,
-      ) as unknown as WebApiSlackServiceInterface,
-    );
+      serviceWithWebClientMock = new UsersSlackService(
+        new WebApiSlackService(
+          configService as unknown as ConfigService<
+            Record<string, unknown>,
+            false
+          >,
+        ) as unknown as WebApiSlackServiceInterface,
+      );
 
-    await expect(
-      serviceWithWebClientMock.getProfilesByIds(usersIds),
-    ).rejects.toThrowError();
+      jest.spyOn(Logger.prototype, 'error').mockImplementation(LoggerErrorMock);
+    });
 
-    spy.mockRestore();
-  });
+    afterEach(() => {
+      LoggerErrorMock.mockRestore();
+    });
 
-  it('should call logger if slack api throwns an error', async () => {
-    const usersIds = usersIdsAndEmails.map((i) => i.userId);
+    it('should throws the slack api error if it fails', async () => {
+      const usersIds = usersIdsAndEmails.map((i) => i.userId);
 
-    const spy = jest
-      .spyOn(WebClientSlackApi, 'WebClient')
-      .mockImplementationOnce(WebClientMockError);
+      await expect(
+        serviceWithWebClientMock.getProfilesByIds(usersIds),
+      ).rejects.toThrowError();
+    });
 
-    const serviceWithWebClientMock = new UsersSlackService(
-      new WebApiSlackService(
-        configService as unknown as ConfigService<
-          Record<string, unknown>,
-          false
-        >,
-      ) as unknown as WebApiSlackServiceInterface,
-    );
+    it('should call logger if slack api throwns an error', async () => {
+      const usersIds = usersIdsAndEmails.map((i) => i.userId);
 
-    const LoggerErrorMock = jest.fn();
-    const spyLogger = jest
-      .spyOn(LoggerNestJs.prototype, 'error')
-      .mockImplementation(LoggerErrorMock);
-
-    try {
-      await serviceWithWebClientMock.getProfilesByIds(usersIds);
-    } catch (err) {
-      expect(LoggerErrorMock).toBeCalledTimes(1);
-    }
-
-    spy.mockRestore();
-    spyLogger.mockRestore();
+      try {
+        await serviceWithWebClientMock.getProfilesByIds(usersIds);
+      } catch (err) {
+        expect(LoggerErrorMock).toBeCalledTimes(1);
+      }
+    });
   });
 });
