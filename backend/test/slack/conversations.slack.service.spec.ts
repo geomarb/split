@@ -128,7 +128,7 @@ describe('ConversationsSlackService', () => {
     ).rejects.toThrowError();
   });
 
-  it('should call logger slack api throwns an error', async () => {
+  it('should call logger if slack api throwns an error', async () => {
     const input: CreateChannelDto = {
       name: 'test',
     };
