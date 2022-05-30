@@ -42,6 +42,7 @@ const SignUpForm: React.FC<SignUpFormProps> = ({ setShowSignUp, setEmailName, em
 			suspense: false,
 			onSuccess: (data) => {
 				if (data === 'az') {
+					console.log("teste push origin");
 					setShowSignUp(SignUpEnum.SIGN_UP_OPTIONS);
 					return;
 				}
