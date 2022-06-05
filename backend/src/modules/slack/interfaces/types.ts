@@ -19,3 +19,10 @@ export type RetroUser = {
 };
 
 export type RetroTeamMessageType = 'error' | 'warning' | 'info' | 'success';
+
+export type RetroTeamMessage = {
+  type: RetroTeamMessageType;
+  title?: string;
+  body?: string;
+  data?: any;
+};

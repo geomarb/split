@@ -40,6 +40,14 @@ const usersIdsAndEmails2 = [
     email: 'email_id_2_3@test.com',
   },
 ];
+const usersIdsAndEmails3 = [
+  {
+    email: 'email_id_3_1@test.com',
+  },
+  {
+    email: 'email_id_3_2@test.com',
+  },
+];
 
 const MakeConversationsSlackServiceStub = () => {
   class ConversationsSlackServiceStub
@@ -60,7 +68,9 @@ const MakeConversationsSlackServiceStub = () => {
 
     fetchMembersFromChannelSlowly(_channelId: string): Promise<string[]> {
       return Promise.resolve(
-        [...usersIdsAndEmails1, ...usersIdsAndEmails2].map((i) => i.userId),
+        [...usersIdsAndEmails1, ...usersIdsAndEmails2]
+          // .filter((i) => !!i.userId) // remove users that are not in the slack channel
+          .map((i) => i.userId),
       );
     }
   }
@@ -119,11 +129,14 @@ describe('ApiSlackService', () => {
       .mockImplementationOnce(async (_retroTeams: RetroTeamSlackDto[]) => {
         // eslint-disable-next-line @typescript-eslint/dot-notation
         result = await service['fillRetroTeams'](_retroTeams);
+
+        return [];
       });
 
     await service.createChannelsForRetroTeam(givenRetroTeamsSlackDto);
 
-    expect(result).toMatchObject([
+    const [resultRetroTeams] = result;
+    expect(resultRetroTeams).toMatchObject([
       {
         name: 'test_team_1',
         participants: [
@@ -163,6 +176,100 @@ describe('ApiSlackService', () => {
             slackId: 'U_id_2_3',
           },
         ],
+      },
+    ]);
+
+    spy.mockRestore();
+  });
+
+  it('should return feedback message for users without a slack id', async () => {
+    const givenRetroTeamsSlackDto: RetroTeamSlackDto[] = [
+      {
+        name: 'test_team_1',
+        participants: [...usersIdsAndEmails1, ...usersIdsAndEmails3].map(
+          (i) => ({
+            email: i.email,
+            responsible: false,
+          }),
+        ),
+      },
+      {
+        name: 'test_team_2',
+        participants: usersIdsAndEmails2.map((i) => ({
+          email: i.email,
+          responsible: false,
+        })),
+      },
+    ];
+
+    let result;
+
+    const spy = jest
+      .spyOn(service, 'createChannelsForRetroTeam')
+      .mockImplementationOnce(async (_retroTeams: RetroTeamSlackDto[]) => {
+        // eslint-disable-next-line @typescript-eslint/dot-notation
+        result = await service['fillRetroTeams'](_retroTeams);
+
+        return [];
+      });
+
+    await service.createChannelsForRetroTeam(givenRetroTeamsSlackDto);
+
+    const [, resultMessages] = result;
+
+    expect(resultMessages).toMatchObject([
+      {
+        type: 'warning',
+        title: 'Users not assigned to master slack channel',
+        data: ['email_id_3_1@test.com', 'email_id_3_2@test.com'],
+      },
+    ]);
+
+    spy.mockRestore();
+  });
+
+  it('should return feedback message for users without a team', async () => {
+    const userOnSlackWithoutATeam = usersIdsAndEmails2[0];
+
+    const givenRetroTeamsSlackDto: RetroTeamSlackDto[] = [
+      {
+        name: 'test_team_1',
+        participants: [...usersIdsAndEmails1].map((i) => ({
+          email: i.email,
+          responsible: false,
+        })),
+      },
+      {
+        name: 'test_team_2',
+        participants: usersIdsAndEmails2
+          .filter((i) => i.userId !== userOnSlackWithoutATeam.userId)
+          .map((i) => ({
+            email: i.email,
+            responsible: false,
+          })),
+      },
+    ];
+
+    let result;
+
+    const spy = jest
+      .spyOn(service, 'createChannelsForRetroTeam')
+      .mockImplementationOnce(async (_retroTeams: RetroTeamSlackDto[]) => {
+        // eslint-disable-next-line @typescript-eslint/dot-notation
+        result = await service['fillRetroTeams'](_retroTeams);
+
+        return [];
+      });
+
+    await service.createChannelsForRetroTeam(givenRetroTeamsSlackDto);
+
+    const [, resultMessages] = result;
+
+    expect(resultMessages).toMatchObject([
+      {
+        type: 'warning',
+        title: 'Users assigned to master slack channel without a RetroTeam',
+        data: ['email_id_2_1@test.com'],
       },
     ]);
 
