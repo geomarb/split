@@ -17,3 +17,5 @@ export type RetroUser = {
   responsible?: boolean;
   errors?: RetroError[];
 };
+
+export type RetroTeamMessageType = 'error' | 'warning' | 'info' | 'success';
