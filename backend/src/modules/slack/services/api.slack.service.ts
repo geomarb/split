@@ -29,15 +29,14 @@ export class ApiSlackService {
     );
     messages.push(...messagesFromFill);
 
-    const responsiblesList = retroTeams
-      .map((retroTeam) =>
-        retroTeam.participants.find((participant) => participant.responsible),
-      )
-      .filter((i) => !!i) as RetroUser[];
+    const responsiblesList = this.getResponsibles(retroTeams);
+    const messagesFromCreateChannelForResponsibles =
+      await this.createChannelForResponsibles(responsiblesList);
+    messages.push(...messagesFromCreateChannelForResponsibles);
 
-    await this.createChannelForResponsibles(responsiblesList);
-
-    await this.createChannelForEachTeam(retroTeams);
+    const messagedFromCreateChannelForEachTeam =
+      await this.createChannelForEachTeam(retroTeams);
+    messages.push(...messagedFromCreateChannelForEachTeam);
 
     return messages;
   }
@@ -105,9 +104,18 @@ export class ApiSlackService {
     return [retroTeams, messages];
   }
 
+  // this return the list of responsibles
+  // if any member was set as responsible the first participant will be chosen
+  private getResponsibles(retroTeams: RetroTeamSlackDto[]) {
+    return retroTeams.reduce((acc, item) => {
+      const responsa = item.participants.find((i) => i.responsible);
+      return [...acc, responsa ?? item.participants[0]];
+    }, [] as RetroUser[]);
+  }
+
   private async createChannelForResponsibles(
     responsiblesList: RetroUser[],
-  ): Promise<boolean> {
+  ): Promise<RetroTeamMessage[]> {
     const { id: channelId } =
       await this.conversationsSlackService.createChannel({
         name: 'responsibles',
@@ -117,16 +125,36 @@ export class ApiSlackService {
       await this.conversationsSlackService.inviteUsersToChannel(
         channelId,
         responsiblesList
-          .filter((r) => typeof r.slackId === 'string')
-          .map((r) => r.slackId as string),
+          .filter((i) => typeof i.slackId === 'string')
+          .map((i) => i.slackId as string),
       );
+    const messages: RetroTeamMessage[] = [
+      {
+        type: 'success',
+        title: 'Channel created and all responsibles were invited',
+        data: inviteResponsiblesSuccess,
+      },
+    ];
 
-    return inviteResponsiblesSuccess;
+    const autoNominatedUsersAsResponsibles = responsiblesList.filter(
+      (i) => !i.responsible,
+    );
+
+    if (autoNominatedUsersAsResponsibles.length > 0) {
+      messages.push({
+        type: 'warning',
+        title:
+          'Those teams that did not assign a responsible person were assigned one automatically',
+        data: autoNominatedUsersAsResponsibles,
+      });
+    }
+
+    return messages;
   }
 
   private async createChannelForEachTeam(
     retroTeams: RetroTeamSlackDto[],
-  ): Promise<boolean> {
+  ): Promise<RetroTeamMessage[]> {
     const createChannelsPromises = retroTeams.map(({ name }) =>
       this.conversationsSlackService.createChannel({
         name,
@@ -150,6 +178,12 @@ export class ApiSlackService {
 
     const inviteUsersSuccess = await Promise.all(inviteUsersPromises);
 
-    return inviteUsersSuccess.every((i) => i === true);
+    return [
+      {
+        type: 'success',
+        title: 'Channel created and all members were invited',
+        data: inviteUsersSuccess.every((i) => i === true),
+      },
+    ];
   }
 }

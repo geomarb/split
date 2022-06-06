@@ -11,6 +11,7 @@ import { UsersSlackServiceInterface } from '../../src/modules/slack/interfaces/s
 import { CreateChannelDto } from '../../src/modules/slack/dto/create.channel.slack.dto';
 import { Profile } from '../../src/modules/slack/services/webapi.slack.service';
 import { RetroTeamSlackDto } from '../../src/modules/slack/dto/retro-teams.slack.dto';
+import { RetroUser } from '../../src/modules/slack/interfaces/types';
 
 const usersIdsAndEmails1 = [
   {
@@ -274,5 +275,50 @@ describe('ApiSlackService', () => {
     ]);
 
     spy.mockRestore();
+  });
+
+  it('should create channel for responsibles successfuly and return feedback messages', async () => {
+    const responsiblesList: RetroUser[] = [
+      {
+        email: usersIdsAndEmails1[0].email,
+        slackId: usersIdsAndEmails1[0].userId,
+        responsible: true,
+      },
+      {
+        email: usersIdsAndEmails2[0].email,
+        slackId: usersIdsAndEmails2[0].userId,
+        responsible: true,
+      },
+      {
+        email: usersIdsAndEmails2[1].email,
+        slackId: usersIdsAndEmails2[1].userId,
+        responsible: false,
+      },
+    ];
+
+    // eslint-disable-next-line @typescript-eslint/dot-notation
+    const fn = service['createChannelForResponsibles'];
+
+    const result = await fn.call(service, responsiblesList);
+
+    expect(result).toMatchObject([
+      {
+        type: 'success',
+        title: 'Channel created and all responsibles were invited',
+        data: true,
+      },
+      {
+        type: 'warning',
+        title:
+          'Those teams that did not assign a responsible person were assigned one automatically',
+        data: [
+          {
+            email: 'email_id_2_2@test.com',
+            slackId: 'U_id_2_2',
+            responsible: false,
+          },
+        ],
+      },
+    ]);
   });
 });
