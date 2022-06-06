@@ -57,14 +57,22 @@ const MakeConversationsSlackServiceStub = () => {
     createChannel(
       _createChannelDto: CreateChannelDto,
     ): Promise<{ name: string; id: string }> {
+      if (_createChannelDto.name === 'a_team_channel_to_fails') {
+        return Promise.reject(
+          new Error(
+            `some error message trying to create a channel for team: ${_createChannelDto.name}`,
+          ),
+        );
+      }
+
       return Promise.resolve({ id: 'any_id', name: 'any_name' });
     }
 
     inviteUsersToChannel(
       _channelId: string,
       _usersIds: string[],
-    ): Promise<boolean> {
-      return Promise.resolve(true);
+    ): Promise<{ ok: boolean; channelId: string }> {
+      return Promise.resolve({ ok: true, channelId: _channelId });
     }
 
     fetchMembersFromChannelSlowly(_channelId: string): Promise<string[]> {
@@ -90,11 +98,14 @@ const MakeUsersSlackServiceStub = () => {
 
 describe('ApiSlackService', () => {
   let service: ApiSlackService;
+  let conversationsService: ConversationsSlackServiceInterface;
 
   beforeAll(async () => {
+    conversationsService = MakeConversationsSlackServiceStub();
+
     service = new ApiSlackService(
       configService as unknown as ConfigService<Record<string, unknown>, false>,
-      MakeConversationsSlackServiceStub(),
+      conversationsService,
       MakeUsersSlackServiceStub(),
     );
 
@@ -277,7 +288,7 @@ describe('ApiSlackService', () => {
     spy.mockRestore();
   });
 
-  it('should create channel for responsibles successfuly and return feedback messages', async () => {
+  it('should create channel for responsibles (and invite them) successfuly and return feedback messages', async () => {
     const responsiblesList: RetroUser[] = [
       {
         email: usersIdsAndEmails1[0].email,
@@ -304,8 +315,13 @@ describe('ApiSlackService', () => {
     expect(result).toMatchObject([
       {
         type: 'success',
-        title: 'Channel created and all responsibles were invited',
-        data: true,
+        title: 'Channel for responsibles created',
+        data: { id: 'any_id', name: 'any_name' },
+      },
+      {
+        type: 'success',
+        title: 'All responsibles were invited',
+        data: { ok: true, channelId: 'any_id' },
       },
       {
         type: 'warning',
@@ -320,5 +336,98 @@ describe('ApiSlackService', () => {
         ],
       },
     ]);
+  });
+
+  it('should create channels for each team (and invite all members) successfuly and return feedback messages', async () => {
+    const givenRetroTeamsSlackDto: RetroTeamSlackDto[] = [
+      {
+        name: 'test_team_1',
+        participants: usersIdsAndEmails1.map((i) => ({
+          email: i.email,
+          responsible: false,
+        })),
+      },
+      {
+        name: 'test_team_2',
+        participants: usersIdsAndEmails2.map((i) => ({
+          email: i.email,
+          responsible: false,
+        })),
+      },
+      {
+        name: 'a_team_channel_to_fails',
+        participants: usersIdsAndEmails2.map((i) => ({
+          email: i.email,
+          responsible: false,
+        })),
+      },
+    ];
+
+    // eslint-disable-next-line @typescript-eslint/dot-notation
+    const fn = service['createChannelForEachTeam'];
+
+    const result = await fn.call(service, givenRetroTeamsSlackDto);
+
+    expect(result).toMatchObject([
+      {
+        type: 'success',
+        title: 'Channels for teams created',
+        data: [
+          { id: 'any_id', name: 'any_name' },
+          { id: 'any_id', name: 'any_name' },
+        ],
+      },
+      {
+        type: 'error',
+        title: 'Channels for teams fails',
+        data: [
+          'some error message trying to create a channel for team: a_team_channel_to_fails',
+        ],
+      },
+      {
+        type: 'success',
+        title: 'All members were invited',
+        data: { ok: true, channelId: 'any_id' },
+      },
+      {
+        type: 'success',
+        title: 'All members were invited',
+        data: { ok: true, channelId: 'any_id' },
+      },
+    ]);
+  });
+
+  it('should return feedback messages fails if inviteUsers throw an error', async () => {
+    const givenRetroTeamsSlackDto: RetroTeamSlackDto[] = [
+      {
+        name: 'test_team_1',
+        participants: usersIdsAndEmails1.map((i) => ({
+          email: i.email,
+          responsible: false,
+        })),
+      },
+    ];
+
+    const spy = jest
+      .spyOn(conversationsService, 'inviteUsersToChannel')
+      .mockImplementationOnce(async (channelId: string, usersIds: string[]) => {
+        return Promise.reject(new Error('some error'));
+      });
+
+    // eslint-disable-next-line @typescript-eslint/dot-notation
+    const fn = service['createChannelForEachTeam'];
+
+    const result = await fn.call(service, givenRetroTeamsSlackDto);
+
+    expect(result).toMatchObject([
+      {
+        type: 'success',
+        title: 'Channels for teams created',
+        data: [{ id: 'any_id', name: 'any_name' }],
+      },
+      { type: 'error', title: 'Invite members fails', data: 'some error' },
+    ]);
+
+    spy.mockRestore();
   });
 });

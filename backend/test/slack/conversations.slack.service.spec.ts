@@ -119,7 +119,7 @@ describe('ConversationsSlackService', () => {
 
     const result = await service.inviteUsersToChannel(channelId, usersIds);
 
-    expect(result).toBe(true);
+    expect(result).toMatchObject({ channelId: 'C_any_id', ok: true });
   });
 
   it('should fetch members from a channel by channel id', async () => {

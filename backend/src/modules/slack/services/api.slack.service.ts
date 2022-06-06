@@ -41,6 +41,7 @@ export class ApiSlackService {
     return messages;
   }
 
+  // returns a new RetroTeams collection, remove all users without a slack ID
   private async fillRetroTeams(
     _retroTeams: RetroTeamSlackDto[],
   ): Promise<[RetroTeamSlackDto[], RetroTeamMessage[]]> {
@@ -105,7 +106,7 @@ export class ApiSlackService {
   }
 
   // this return the list of responsibles
-  // if any member was set as responsible the first participant will be chosen
+  // if any member was not set as responsible the first participant will be chosen
   private getResponsibles(retroTeams: RetroTeamSlackDto[]) {
     return retroTeams.reduce((acc, item) => {
       const responsa = item.participants.find((i) => i.responsible);
@@ -116,10 +117,17 @@ export class ApiSlackService {
   private async createChannelForResponsibles(
     responsiblesList: RetroUser[],
   ): Promise<RetroTeamMessage[]> {
-    const { id: channelId } =
+    const messages: RetroTeamMessage[] = [];
+
+    const { id: channelId, name } =
       await this.conversationsSlackService.createChannel({
         name: 'responsibles',
       });
+    messages.push({
+      type: 'success',
+      title: 'Channel for responsibles created',
+      data: { id: channelId, name },
+    });
 
     const inviteResponsiblesSuccess =
       await this.conversationsSlackService.inviteUsersToChannel(
@@ -128,13 +136,11 @@ export class ApiSlackService {
           .filter((i) => typeof i.slackId === 'string')
           .map((i) => i.slackId as string),
       );
-    const messages: RetroTeamMessage[] = [
-      {
-        type: 'success',
-        title: 'Channel created and all responsibles were invited',
-        data: inviteResponsiblesSuccess,
-      },
-    ];
+    messages.push({
+      type: 'success',
+      title: 'All responsibles were invited',
+      data: inviteResponsiblesSuccess,
+    });
 
     const autoNominatedUsersAsResponsibles = responsiblesList.filter(
       (i) => !i.responsible,
@@ -155,35 +161,87 @@ export class ApiSlackService {
   private async createChannelForEachTeam(
     retroTeams: RetroTeamSlackDto[],
   ): Promise<RetroTeamMessage[]> {
+    const messages: RetroTeamMessage[] = [];
+
     const createChannelsPromises = retroTeams.map(({ name }) =>
       this.conversationsSlackService.createChannel({
         name,
       }),
     );
 
-    const createdChannels = await Promise.all(createChannelsPromises);
+    const [successCreateChannels, errorCreateChannels] =
+      await this.resolveAllPromises(createChannelsPromises);
 
-    const inviteUsersPromises = retroTeams.reduce((acc, item, idx) => {
+    if (successCreateChannels.length > 0) {
+      messages.push({
+        type: 'success',
+        title: 'Channels for teams created',
+        data: successCreateChannels,
+      });
+    }
+
+    if (errorCreateChannels.length > 0) {
+      messages.push({
+        type: 'error',
+        title: 'Channels for teams fails',
+        data: errorCreateChannels,
+      });
+    }
+
+    const inviteUsersPromises = successCreateChannels.reduce((acc, item) => {
+      const found = retroTeams.find((i) => item.name.includes(i.name)) || {
+        participants: [],
+      };
+
       acc.push(
         this.conversationsSlackService.inviteUsersToChannel(
-          createdChannels[idx].id,
-          item.participants
+          item.id,
+          found.participants
             .filter((r) => typeof r.slackId === 'string')
             .map((p) => p.slackId as string),
         ),
       );
 
       return acc;
-    }, [] as Promise<boolean>[]);
+    }, [] as Promise<any>[]);
 
-    const inviteUsersSuccess = await Promise.all(inviteUsersPromises);
+    const [successInviteUsers, errorsInviteUsers] =
+      await this.resolveAllPromises(inviteUsersPromises);
 
-    return [
-      {
+    successInviteUsers.forEach((i) =>
+      messages.push({
         type: 'success',
-        title: 'Channel created and all members were invited',
-        data: inviteUsersSuccess.every((i) => i === true),
-      },
-    ];
+        title: 'All members were invited',
+        data: i,
+      }),
+    );
+
+    errorsInviteUsers.forEach((i) =>
+      messages.push({
+        type: 'error',
+        title: 'Invite members fails',
+        data: i,
+      }),
+    );
+
+    return messages;
+  }
+
+  private async resolveAllPromises(promises: Promise<any>[]): Promise<any[][]> {
+    const results = await Promise.allSettled(promises);
+
+    const success = results
+      .filter((i) => i.status === 'fulfilled')
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      .map((i) => i.value);
+
+    const errors = results
+      .filter((i) => i.status === 'rejected')
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      .map((i) => (typeof i.reason === 'string' ? i.reason : i.reason.message));
+
+    return [success, errors];
   }
 }

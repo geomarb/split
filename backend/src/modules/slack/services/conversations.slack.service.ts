@@ -47,7 +47,7 @@ export class ConversationsSlackService
   async inviteUsersToChannel(
     channelId: string,
     usersIds: string[],
-  ): Promise<boolean> {
+  ): Promise<{ ok: boolean; channelId: string }> {
     try {
       // https://api.slack.com/methods/admin.conversations.invite
       const { ok } = await this.webApiSlackService
@@ -57,7 +57,7 @@ export class ConversationsSlackService
           users: usersIds.join(','),
         });
 
-      return ok;
+      return { ok, channelId };
     } catch (error) {
       this.logger.error(error);
 

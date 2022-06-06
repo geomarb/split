@@ -5,7 +5,10 @@ export interface ConversationsSlackServiceInterface {
     createChannelDto: CreateChannelDto,
   ): Promise<{ name: string; id: string }>;
 
-  inviteUsersToChannel(channelId: string, usersIds: string[]): Promise<boolean>;
+  inviteUsersToChannel(
+    channelId: string,
+    usersIds: string[],
+  ): Promise<{ ok: boolean; channelId: string }>;
 
   fetchMembersFromChannelSlowly(channelId: string): Promise<string[]>;
 }
