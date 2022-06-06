@@ -6,6 +6,7 @@ import { ConfigService } from '@nestjs/config';
 import configService from '../../src/libs/test-utils/mocks/configService.mock';
 import { ApiSlackService } from '../../src/modules/slack/services/api.slack.service';
 
+import { ChatSlackServiceInterface } from '../../src/modules/slack/interfaces/services/chat.slack.service';
 import { ConversationsSlackServiceInterface } from '../../src/modules/slack/interfaces/services/conversations.slack.service';
 import { UsersSlackServiceInterface } from '../../src/modules/slack/interfaces/services/users.slack.service';
 import { CreateChannelDto } from '../../src/modules/slack/dto/create.channel.slack.dto';
@@ -96,6 +97,19 @@ const MakeUsersSlackServiceStub = () => {
   return new UsersSlackServiceStub();
 };
 
+const MakeChatSlackServiceStub = () => {
+  class ChatSlackServiceStub implements ChatSlackServiceInterface {
+    postMessage(
+      channelId: string,
+      text: string,
+    ): Promise<{ ok: boolean; channel: string }> {
+      return Promise.resolve({ channel: channelId, ok: true });
+    }
+  }
+
+  return new ChatSlackServiceStub();
+};
+
 describe('ApiSlackService', () => {
   let service: ApiSlackService;
   let conversationsService: ConversationsSlackServiceInterface;
@@ -107,6 +121,7 @@ describe('ApiSlackService', () => {
       configService as unknown as ConfigService<Record<string, unknown>, false>,
       conversationsService,
       MakeUsersSlackServiceStub(),
+      MakeChatSlackServiceStub(),
     );
 
     jest.spyOn(Logger.prototype, 'error').mockImplementation(jest.fn);
@@ -310,7 +325,7 @@ describe('ApiSlackService', () => {
     // eslint-disable-next-line @typescript-eslint/dot-notation
     const fn = service['createChannelForResponsibles'];
 
-    const result = await fn.call(service, responsiblesList);
+    const [result] = await fn.call(service, responsiblesList);
 
     expect(result).toMatchObject([
       {

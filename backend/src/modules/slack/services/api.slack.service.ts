@@ -3,6 +3,7 @@ import { ConfigService } from '@nestjs/config';
 
 import { SLACK_MASTER_CHANNEL_ID } from '../../../libs/constants/slack';
 import { RetroTeamSlackDto } from '../dto/retro-teams.slack.dto';
+import { ChatSlackServiceInterface } from '../interfaces/services/chat.slack.service';
 import { ConversationsSlackServiceInterface } from '../interfaces/services/conversations.slack.service';
 import { UsersSlackServiceInterface } from '../interfaces/services/users.slack.service';
 import { RetroTeamMessage, RetroUser, TYPES } from '../interfaces/types';
@@ -17,9 +18,11 @@ export class ApiSlackService {
     private readonly conversationsSlackService: ConversationsSlackServiceInterface,
     @Inject(TYPES.services.UsersSlackService)
     private readonly usersSlackService: UsersSlackServiceInterface,
+    @Inject(TYPES.services.ChatSlackService)
+    private readonly chatSlackService: ChatSlackServiceInterface,
   ) {}
 
-  async createChannelsForRetroTeam(
+  public async createChannelsForRetroTeam(
     _retroTeams: RetroTeamSlackDto[],
   ): Promise<RetroTeamMessage[]> {
     const messages: RetroTeamMessage[] = [];
@@ -30,18 +33,32 @@ export class ApiSlackService {
     messages.push(...messagesFromFill);
 
     const responsiblesList = this.getResponsibles(retroTeams);
-    const messagesFromCreateChannelForResponsibles =
-      await this.createChannelForResponsibles(responsiblesList);
+    const [
+      messagesFromCreateChannelForResponsibles,
+      autoNominatedResponsibles,
+    ] = await this.createChannelForResponsibles(responsiblesList);
     messages.push(...messagesFromCreateChannelForResponsibles);
 
-    const messagedFromCreateChannelForEachTeam =
-      await this.createChannelForEachTeam(retroTeams);
-    messages.push(...messagedFromCreateChannelForEachTeam);
+    // if there are responsibles auto nominated fix the retroTeams
+    const retroTeamsFixed = this.fixRetroTeamWithAutoNominatedResponsibles(
+      retroTeams,
+      autoNominatedResponsibles,
+    );
+
+    const messagesFromCreateChannelForEachTeam =
+      await this.createChannelForEachTeam(retroTeamsFixed);
+    messages.push(...messagesFromCreateChannelForEachTeam);
+
+    const messageFromNotifyMasterChannel = await this.notifyMasterChannel(
+      retroTeamsFixed,
+    );
+    messages.push(...messageFromNotifyMasterChannel);
 
     return messages;
   }
 
   // returns a new RetroTeams collection, remove all users without a slack ID
+  // add userId and add real_name from slack if none provided
   private async fillRetroTeams(
     _retroTeams: RetroTeamSlackDto[],
   ): Promise<[RetroTeamSlackDto[], RetroTeamMessage[]]> {
@@ -64,7 +81,11 @@ export class ApiSlackService {
         );
 
         if (found) {
-          participants.push({ ...participant, slackId: found.userId });
+          participants.push({
+            ...participant,
+            slackId: found.userId,
+            ...(!participant.name ? { name: found.real_name } : null),
+          });
         } else {
           messageData.push(participant.email);
         }
@@ -105,6 +126,27 @@ export class ApiSlackService {
     return [retroTeams, messages];
   }
 
+  private fixRetroTeamWithAutoNominatedResponsibles(
+    _retroTeams: RetroTeamSlackDto[],
+    _autoNominatedResponsibles: RetroUser[],
+  ): RetroTeamSlackDto[] {
+    const retroTeams = [..._retroTeams];
+    if (_autoNominatedResponsibles.length > 0) {
+      _autoNominatedResponsibles.forEach((i) => {
+        let participant: RetroUser | undefined;
+        retroTeams.find((r) => {
+          participant = r.participants.find((p) => p.email === i.email);
+          if (participant) {
+            participant.responsible = true;
+          }
+          return !!participant;
+        });
+      });
+    }
+
+    return retroTeams;
+  }
+
   // this return the list of responsibles
   // if any member was not set as responsible the first participant will be chosen
   private getResponsibles(retroTeams: RetroTeamSlackDto[]) {
@@ -116,7 +158,7 @@ export class ApiSlackService {
 
   private async createChannelForResponsibles(
     responsiblesList: RetroUser[],
-  ): Promise<RetroTeamMessage[]> {
+  ): Promise<[RetroTeamMessage[], RetroUser[]]> {
     const messages: RetroTeamMessage[] = [];
 
     const { id: channelId, name } =
@@ -142,20 +184,20 @@ export class ApiSlackService {
       data: inviteResponsiblesSuccess,
     });
 
-    const autoNominatedUsersAsResponsibles = responsiblesList.filter(
+    const autoNominatedResponsibles = responsiblesList.filter(
       (i) => !i.responsible,
     );
 
-    if (autoNominatedUsersAsResponsibles.length > 0) {
+    if (autoNominatedResponsibles.length > 0) {
       messages.push({
         type: 'warning',
         title:
           'Those teams that did not assign a responsible person were assigned one automatically',
-        data: autoNominatedUsersAsResponsibles,
+        data: autoNominatedResponsibles,
       });
     }
 
-    return messages;
+    return [messages, autoNominatedResponsibles];
   }
 
   private async createChannelForEachTeam(
@@ -225,6 +267,62 @@ export class ApiSlackService {
     );
 
     return messages;
+  }
+
+  private async notifyMasterChannel(
+    _retroTeams: RetroTeamSlackDto[],
+  ): Promise<RetroTeamMessage[]> {
+    const textGeneralTeams = _retroTeams.reduce((text, team) => {
+      text += `\n${team.name}:\n`;
+
+      team.participants.forEach((i, idx) => {
+        text += `${idx + 1}. ${i.name || i.email}`;
+        if (i.responsible) {
+          text += ` *- Responsible*`;
+        }
+        text += '\n';
+      });
+
+      return text;
+    }, '');
+
+    const today = new Date();
+    const until = new Date(
+      today.setMonth(today.getMonth() + 1),
+    ).toLocaleDateString('en-US', {
+      month: 'long',
+    });
+
+    const generalText = `<!channel> In order to proceed with the retro of this month, here are the random teams: \n\n
+    ${textGeneralTeams} \n
+    Each team has a *random* selected responsible, in order to create the board, organize the retro and everything else that is described in the doc(https://confluence.kigroup.de/display/OX/Retro) :eyes: :thumbsup:\n\n
+    This must be done until \`${until} 1st\`\n\n
+    All the channels needed have been created automatically for your team and another one for responsibles of the teams.\n\n
+    (Note: currently, retrobot does not check if the chosen responsibles joined xgeeks less than 3 months ago, so, if that happens, you have to decide who will take that role in the team. In the future, retrobot will automatically validate this rule.)\n\n
+    Talent wins games, but teamwork and intelligence wins championships. :fire: :muscle:`;
+
+    const result = await this.chatSlackService.postMessage(
+      this.configService.get(SLACK_MASTER_CHANNEL_ID) as string,
+      generalText,
+    );
+
+    if (!result.ok) {
+      return [
+        {
+          type: 'error',
+          title: 'Fail to send Message to Master Channel',
+          data: generalText,
+        },
+      ];
+    }
+
+    return [
+      {
+        type: 'info',
+        title: 'Message send to Master Channel',
+        data: generalText,
+      },
+    ];
   }
 
   private async resolveAllPromises(promises: Promise<any>[]): Promise<any[][]> {

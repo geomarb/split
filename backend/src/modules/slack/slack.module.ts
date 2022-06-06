@@ -3,6 +3,7 @@ import { Module } from '@nestjs/common';
 import SlackController from './controller/slack.controller';
 import {
   apiSlackService,
+  chatSlackService,
   conversationsSlackService,
   usersSlackService,
   webApiSlackService,
@@ -13,6 +14,7 @@ import {
     webApiSlackService,
     usersSlackService,
     conversationsSlackService,
+    chatSlackService,
     apiSlackService,
   ],
   controllers: [SlackController],

@@ -1,6 +1,7 @@
 export const TYPES = {
   services: {
     ApiSlackService: 'ApiSlackService',
+    ChatSlackService: 'ChatSlackService',
     ConversationsSlackService: 'ConversationsSlackService',
     UsersSlackService: 'UsersSlackService',
     WebApiSlackService: 'WebApiSlackService',
@@ -13,6 +14,7 @@ export type RetroError = {
 
 export type RetroUser = {
   email: string;
+  name?: string;
   slackId?: string;
   responsible?: boolean;
   errors?: RetroError[];
