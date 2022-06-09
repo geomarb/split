@@ -11,6 +11,7 @@ import { faker } from '@faker-js/faker';
 
 import configService from '../../src/libs/test-utils/mocks/configService.mock';
 import {
+  chatSlackService,
   conversationsSlackService,
   usersSlackService,
   webApiSlackService,
@@ -70,6 +71,7 @@ describe('Service', () => {
         webApiSlackService,
         usersSlackService,
         conversationsSlackService,
+        chatSlackService,
         ApiSlackService,
       ],
     }).compile();
