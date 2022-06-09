@@ -48,7 +48,7 @@ export const configuration = (): Configuration => {
       enabled: process.env.STMP_ENABLE === 'true',
     },
     slack: {
-      enabled: process.env.SLACK_ENABLED === 'true',
+      enable: process.env.SLACK_ENABLE === 'true',
       botToken: process.env.SLACK_API_BOT_TOKEN as string,
       masterChannelId: process.env.SLACK_MASTER_CHANNEL_ID as string,
       channelPrefix: process.env.SLACK_CHANNEL_PREFIX as string,

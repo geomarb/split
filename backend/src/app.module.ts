@@ -43,7 +43,7 @@ if (configuration().azure.enabled) {
 if (configuration().smtp.enabled) {
   imports.push(EmailModule);
 }
-if (configuration().slack.enabled) {
+if (configuration().slack.enable) {
   imports.push(SlackModule);
 }
 
