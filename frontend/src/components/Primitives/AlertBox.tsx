@@ -12,7 +12,7 @@ interface AlertBoxProps {
 	title?: string;
 	text: string;
 }
-
+tenta
 const AlertStyle = styled(Flex, {
 	padding: '16px 40px',
 	height: 'fit-content',
