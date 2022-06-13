@@ -1,0 +1,273 @@
+import React, { useState } from 'react';
+import { Controller, useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import SchemaSelectForm from '../../schema/schemaSelectForm';
+import { styled } from 'styles/stitches/stitches.config';
+import AlertBox from '../Primitives/AlertBox';
+import Button from '../Primitives/Button';
+import Checkbox from '../Primitives/CheckBox';
+import DatePickerBox from '../Primitives/DatePicker';
+import Flex from '../Primitives/Flex';
+import SelectBox from '../Primitives/Select';
+import Text from '../Primitives/Text';
+
+const StyledForm = styled('form', Flex, { width: '100%' });
+
+const Seperator = styled(Flex, {
+	width: '520px',
+	height: '1px',
+	backgroundColor: '#CBD2D9',
+	alignItems: 'center',
+	marginBottom: '24px',
+	marginTop: '24px'
+});
+
+const MasterContainer = styled(Flex, {
+	width: '$584',
+	height: '968px',
+	backGroundColor: 'black',
+	border: '2px solid black',
+	borderRadius: '$12',
+	margin: '26px 300px 30px 556px',
+	position: 'absolute'
+});
+
+const MainContainer = styled(Flex, {
+	width: '$580',
+	height: '800px',
+	padding: '25px 32px 25px',
+	backgroundColor: 'white',
+	border: ' 1px solid #CBD2D9'
+});
+
+const HeadContainer = styled(Flex, {
+	height: '72px',
+	width: '$580',
+	backgroundColor: 'white',
+	borderRadius: '12px 12px 0px 0px',
+	padding: '24px 0px 24px 32px'
+});
+
+const EndContainer = styled(Flex, {
+	height: '92px',
+	width: '$580',
+	backgroundColor: 'white',
+	borderRadius: '0px 0px 12px 12px',
+	padding: '24px 32px 24px 343px'
+});
+
+const Schedule: React.FC = () => {
+	const [checkedTerms, setCheckedTerms] = useState(false);
+	const { getValues, handleSubmit, control } = useForm<{
+		1: { value: string; label: string };
+		2: { value: string; label: string };
+		3: { value: string; label: string };
+		4: { value: string; label: string };
+		5: { value: string; label: string };
+		6?: { value: string; label: string };
+		DatePV: { value: string; label: string };
+	}>({
+		mode: 'onSubmit',
+		reValidateMode: 'onSubmit',
+		defaultValues: {
+			1: { value: '', label: '' },
+			2: { value: '', label: '' },
+			3: { value: '', label: '' },
+			4: { value: '', label: '' },
+			5: { value: '', label: '' },
+			6: { value: '', label: '' }
+		},
+		resolver: zodResolver(SchemaSelectForm)
+	});
+	return (
+		<MasterContainer direction="column">
+			<StyledForm
+				autoComplete="off"
+				direction="column"
+				onSubmit={handleSubmit((values: unknown) => {
+					console.log(values, getValues(), 'Teste');
+				})}
+			>
+				<HeadContainer>
+					<Text heading="4" size="lg" css={{}}>
+						Set date and time
+					</Text>
+				</HeadContainer>
+
+				<MainContainer direction="column">
+					<AlertBox type="info" text="You're editing the series." />
+					<Text size="md" heading="4" css={{ marginTop: '$24', marginBottom: '$8' }}>
+						Date and time
+					</Text>
+					<Flex>
+						<Controller
+							control={control}
+							name="DatePV"
+							defaultValue=""
+							render={({ field }) => <DatePickerBox />}
+						/>
+					</Flex>
+					<Flex css={{ alignSelf: 'auto' }}>
+						<Flex css={{ width: '252px', marginRight: '16px' }}>
+							<Controller
+								control={control}
+								name="1"
+								defaultValue=""
+								render={({ field }) => (
+									<SelectBox {...field} type="hour" title="From" />
+								)}
+							/>
+						</Flex>
+						<Flex css={{ width: '252px' }}>
+							<Controller
+								control={control}
+								name="2"
+								defaultValue=""
+								render={({ field }) => (
+									<SelectBox {...field} type="hour" title="To" />
+								)}
+							/>
+						</Flex>
+					</Flex>
+					<Seperator />
+					<Text size="md" heading="4" css={{}}>
+						Repeat
+					</Text>
+					<Text size="md" css={{}}>
+						Repeat every days/weeks/months
+					</Text>
+					<Flex css={{ alignItems: 'center', marginBottom: '', marginTop: '$10' }}>
+						<Checkbox
+							id="checkbox1"
+							label=""
+							size="16"
+							setCheckedTerms={setCheckedTerms}
+						/>
+						<Flex css={{ maxWidth: '236px', marginRight: '16px' }}>
+							<Controller
+								control={control}
+								name="3"
+								defaultValue=""
+								render={({ field }) => (
+									<SelectBox {...field} type="days" title="Select time range" />
+								)}
+							/>
+						</Flex>
+						<Flex css={{ maxWidth: '236px' }}>
+							<Controller
+								control={control}
+								name="4"
+								defaultValue=""
+								render={({ field }) => (
+									<SelectBox {...field} type="times" title="Select time range" />
+								)}
+							/>
+						</Flex>
+					</Flex>
+					<Flex direction="column" css={{ marginLeft: '32px', marginTop: '7px' }}>
+						<Text size="md" css={{}}>
+							Occurs every 5 weeks on Monday until:
+						</Text>
+						<Text
+							size="md"
+							css={{
+								color: '#3589EB',
+								margin: '',
+								'&:hover': {
+									textDecorationLine: 'underline',
+									cursor: 'pointer'
+								}
+							}}
+						>
+							Choose an end date
+						</Text>
+					</Flex>
+					<Seperator />
+					<Text size="md" heading="4" css={{ marginBottom: '2px' }}>
+						Reminder
+					</Text>
+					<Text size="md" css={{ marginBottom: '12px' }}>
+						Send reminder minutes/days/weeks before
+					</Text>
+					<Flex css={{ alignItems: 'center', marginBottom: '7px' }}>
+						<Checkbox
+							id="checkbox2"
+							label=""
+							size="16"
+							setCheckedTerms={setCheckedTerms}
+						/>
+						<Flex css={{ maxWidth: '236px', marginRight: '16px' }}>
+							<Controller
+								control={control}
+								name="5"
+								defaultValue=""
+								render={({ field }) => (
+									<SelectBox {...field} type="days" title="Select time range" />
+								)}
+							/>
+						</Flex>
+						<Flex css={{ maxWidth: '236px' }}>
+							<Controller
+								control={control}
+								name="6"
+								defaultValue=""
+								render={({ field }) => (
+									<SelectBox
+										{...field}
+										type="timesBefore"
+										title="Select time range"
+									/>
+								)}
+							/>
+						</Flex>
+					</Flex>
+					<Flex direction="column" css={{ marginLeft: '32px' }}>
+						<Flex css={{ alignItems: 'center', marginBottom: '-6px' }}>
+							<Checkbox
+								id="checkbox3"
+								label="Via Slack"
+								size="16"
+								setCheckedTerms={setCheckedTerms}
+							/>
+						</Flex>
+
+						<Flex css={{ alignItems: 'center', marginBottom: '7px' }}>
+							<Checkbox
+								id="checkbox4"
+								label="Via Email"
+								size="16"
+								setCheckedTerms={setCheckedTerms}
+							/>
+						</Flex>
+
+						<Flex css={{ alignItems: 'center' }}>
+							<Checkbox
+								id="checkbox5"
+								label="Remind prefilling the cards"
+								size="16"
+								setCheckedTerms={setCheckedTerms}
+							/>{' '}
+						</Flex>
+					</Flex>
+				</MainContainer>
+
+				<EndContainer direction="row">
+					<Button type="button" variant="primaryOutline">
+						Cancel
+					</Button>
+					<Button
+						type="submit"
+						variant="primary"
+						css={{
+							marginLeft: '24px'
+						}}
+					>
+						Save
+					</Button>
+				</EndContainer>
+			</StyledForm>
+		</MasterContainer>
+	);
+};
+
+export default Schedule;
