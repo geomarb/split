@@ -1,6 +1,5 @@
-import { styled } from 'styles/stitches/stitches.config';
-
 import { PopoverItem, PopoverTrigger } from 'components/Primitives/Popover';
+import { styled } from 'styles/stitches/stitches.config';
 
 const PopoverTriggerStyled = styled(PopoverTrigger, {
 	cursor: 'pointer',

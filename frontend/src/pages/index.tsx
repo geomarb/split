@@ -1,8 +1,5 @@
 import { useState } from 'react';
 import { GetServerSideProps, NextPage } from 'next';
-import { getSession } from 'next-auth/react';
-
-import { BannerContainer, CenteredContainer, ImageBackground } from 'styles/pages/auth.styles';
 
 import TroubleLogin from 'components/auth/ForgotPassword/TroubleLogin';
 import LoginForm from 'components/auth/LoginForm';
@@ -11,6 +8,8 @@ import Banner from 'components/icons/Banner';
 import { TabsList, TabsRoot, TabsTrigger } from 'components/Primitives/Tab';
 import Text from 'components/Primitives/Text';
 import { DASHBOARD_ROUTE } from 'utils/routes';
+import { getSession } from 'next-auth/react';
+import { BannerContainer, CenteredContainer, ImageBackground } from 'styles/pages/auth.styles';
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
 	const session = await getSession(ctx);

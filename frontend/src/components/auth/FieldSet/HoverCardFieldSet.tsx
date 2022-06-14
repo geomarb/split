@@ -1,7 +1,3 @@
-import { QuestionMarkCircledIcon } from '@modulz/radix-icons';
-
-import { styled } from 'styles/stitches/stitches.config';
-
 import {
 	HoverCardArrow,
 	HoverCardContent,
@@ -10,6 +6,8 @@ import {
 } from 'components/Primitives/HoverCard';
 import Text from 'components/Primitives/Text';
 import UnorderedList from 'components/Primitives/UnorderedList';
+import { QuestionMarkCircledIcon } from '@modulz/radix-icons';
+import { styled } from 'styles/stitches/stitches.config';
 
 const ListItem = styled('li', Text, { fontSize: '$8' });
 const StyledHoverCardContent = styled(HoverCardContent, {

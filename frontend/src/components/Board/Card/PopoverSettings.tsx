@@ -1,7 +1,5 @@
 import React from 'react';
 
-import { styled } from 'styles/stitches/stitches.config';
-
 import Icon from 'components/icons/Icon';
 import {
 	Popover,
@@ -11,6 +9,7 @@ import {
 } from 'components/Primitives/Popover';
 import Text from 'components/Primitives/Text';
 import useCards from 'hooks/useCards';
+import { styled } from 'styles/stitches/stitches.config';
 
 interface PopoverSettingsContentProps {
 	isItem: boolean;

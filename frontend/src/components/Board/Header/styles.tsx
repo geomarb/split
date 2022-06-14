@@ -1,5 +1,4 @@
 import * as PopoverPrimitive from '@radix-ui/react-popover';
-
 import { styled } from 'styles/stitches/stitches.config';
 
 const StyledHeader = styled('div', {

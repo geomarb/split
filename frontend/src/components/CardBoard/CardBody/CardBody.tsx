@@ -1,8 +1,6 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import { useRecoilValue } from 'recoil';
 
-import { styled } from 'styles/stitches/stitches.config';
-
 import Icon from 'components/icons/Icon';
 import Box from 'components/Primitives/Box';
 import Flex from 'components/Primitives/Flex';
@@ -11,6 +9,8 @@ import Tooltip from 'components/Primitives/Tooltip';
 import { newBoardState } from 'store/board/atoms/board.atom';
 import BoardType from 'types/board/board';
 import ClickEvent from 'types/events/clickEvent';
+import { styled } from 'styles/stitches/stitches.config';
+
 import CardAvatars from '../CardAvatars';
 import CardIcon from '../CardIcon';
 import CardEnd from './CardEnd';

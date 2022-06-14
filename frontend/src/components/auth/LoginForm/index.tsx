@@ -1,10 +1,6 @@
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
-import router from 'next/router';
-import { RedirectableProviderType } from 'next-auth/providers';
-import { signIn } from 'next-auth/react';
 import { useSetRecoilState } from 'recoil';
-import { zodResolver } from '@hookform/resolvers/zod';
 
 import Icon from 'components/icons/Icon';
 import LogoIcon from 'components/icons/Logo';
@@ -27,6 +23,11 @@ import {
 import { ToastStateEnum } from 'utils/enums/toast-types';
 import { transformLoginErrorCodes } from 'utils/errorCodes';
 import { DASHBOARD_ROUTE } from 'utils/routes';
+import { zodResolver } from '@hookform/resolvers/zod';
+import router from 'next/router';
+import { RedirectableProviderType } from 'next-auth/providers';
+import { signIn } from 'next-auth/react';
+
 import { LoginButton, OrSeparator, StyledForm, StyledHoverIconFlex } from './styles';
 
 interface LoginFormProps {

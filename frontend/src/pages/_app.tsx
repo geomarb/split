@@ -1,19 +1,18 @@
 import { ReactElement, ReactNode } from 'react';
 import { Hydrate, QueryClient, QueryClientProvider } from 'react-query';
-import { ReactQueryDevtools } from 'react-query/devtools';
 import { NextPage } from 'next';
-import { AppProps } from 'next/app';
-import Head from 'next/head';
-import { useRouter } from 'next/router';
-import { SessionProvider } from 'next-auth/react';
 import { RecoilRoot } from 'recoil';
-
-import globalStyles from 'styles/globals';
 
 import Sprite from 'components/icons/Sprite';
 import Toast, { ToastProvider, ToastViewport } from 'components/Primitives/Toast';
 import { JWT_EXPIRATION_TIME } from 'utils/constants';
 import { ROUTES } from 'utils/routes';
+import { AppProps } from 'next/app';
+import Head from 'next/head';
+import { useRouter } from 'next/router';
+import { SessionProvider } from 'next-auth/react';
+import { ReactQueryDevtools } from 'react-query/devtools';
+import globalStyles from 'styles/globals';
 
 type NextPageWithLayout = NextPage & {
 	getLayout?: (page: ReactElement) => ReactNode;
@@ -40,6 +39,7 @@ function App({ Component, pageProps: { session, ...pageProps } }: AppPropsWithLa
 	return (
 		<>
 			<Head>
+				<title>SPLIT</title>
 				<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 			</Head>
 			<Sprite />

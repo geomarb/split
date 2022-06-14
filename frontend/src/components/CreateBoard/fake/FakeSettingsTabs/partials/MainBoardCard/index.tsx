@@ -1,7 +1,5 @@
 import React from 'react';
 
-import { highlight2Colors } from 'styles/stitches/partials/colors/highlight2.colors';
-
 import LeftArrow from 'components/CardBoard/CardBody/LeftArrow';
 import Icon from 'components/icons/Icon';
 import Avatar from 'components/Primitives/Avatar';
@@ -10,8 +8,11 @@ import Flex from 'components/Primitives/Flex';
 import Separator from 'components/Primitives/Separator';
 import Text from 'components/Primitives/Text';
 import Tooltip from 'components/Primitives/Tooltip';
-import FakeCardAvatars from '../CardAvatars';
+import { highlight2Colors } from 'styles/stitches/partials/colors/highlight2.colors';
+
 import { Container, MainContainer } from './styles';
+
+import FakeCardAvatars from '../CardAvatars';
 
 const FakeMainBoardCard = () => {
 	return (

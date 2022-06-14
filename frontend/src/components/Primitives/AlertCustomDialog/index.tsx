@@ -1,7 +1,16 @@
 import { ReactNode } from 'react';
-import { CSS } from '@stitches/react/types/css-util';
 
 import Icon from 'components/icons/Icon';
+import { CSS } from '@stitches/react/types/css-util';
+
+import {
+	DialogButtons,
+	DialogText,
+	DialogTitleContainer,
+	StyledAlertDialogDescription,
+	StyledDialogTitle
+} from './styles';
+
 import {
 	AlertDialog,
 	AlertDialogAction,
@@ -10,13 +19,6 @@ import {
 } from '../AlertDialog';
 import Flex from '../Flex';
 import Separator from '../Separator';
-import {
-	DialogButtons,
-	DialogText,
-	DialogTitleContainer,
-	StyledAlertDialogDescription,
-	StyledDialogTitle
-} from './styles';
 
 interface BoardAlertDialog {
 	defaultOpen: boolean;

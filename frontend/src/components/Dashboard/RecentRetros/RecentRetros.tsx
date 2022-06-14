@@ -6,6 +6,7 @@ import { getDashboardBoardsRequest } from 'api/boardService';
 import { toastState } from 'store/toast/atom/toast.atom';
 import { ToastStateEnum } from 'utils/enums/toast-types';
 import isEmpty from 'utils/isEmpty';
+
 import EmptyBoards from './EmptyBoards';
 import ListOfCards from './ListOfCards';
 

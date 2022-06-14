@@ -1,6 +1,7 @@
 import Icon from 'components/icons/Icon';
 import Text from 'components/Primitives/Text';
 import { HeaderInfo } from 'types/dashboard/header.info';
+
 import { GridContainer, StyledTile } from './styles';
 
 type TilesProps = {

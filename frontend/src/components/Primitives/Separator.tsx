@@ -1,5 +1,4 @@
 import * as SeparatorPrimitive from '@radix-ui/react-separator';
-
 import { styled } from 'styles/stitches/stitches.config';
 
 const StyledSeparator = styled(SeparatorPrimitive.Root, {

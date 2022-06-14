@@ -1,5 +1,6 @@
 import SideBarContent from './partials/Content';
 import Header from './partials/Header';
+
 import { StyledSidebar } from './styles';
 
 type SideBarProps = {

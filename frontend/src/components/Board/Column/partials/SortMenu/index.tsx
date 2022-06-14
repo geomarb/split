@@ -1,6 +1,7 @@
 import Icon from 'components/icons/Icon';
 import { Popover, PopoverContent } from 'components/Primitives/Popover';
 import Text from 'components/Primitives/Text';
+
 import { PopoverItemStyled, PopoverTriggerStyled } from './styles';
 
 type Props = {

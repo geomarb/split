@@ -1,8 +1,7 @@
 import React from 'react';
 
-import { CSSProps } from 'styles/stitches/stitches.config';
-
 import Svg from 'components/Primitives/Svg';
+import { CSSProps } from 'styles/stitches/stitches.config';
 
 type Props = CSSProps & {
 	onClick?: () => void;

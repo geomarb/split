@@ -1,5 +1,4 @@
 import * as TabsPrimitive from '@radix-ui/react-tabs';
-
 import { styled } from 'styles/stitches/stitches.config';
 
 import Flex from './Flex';

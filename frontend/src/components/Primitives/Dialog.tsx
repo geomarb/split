@@ -1,9 +1,8 @@
+import { contentShow, overlayShow } from 'animations/DialogShow';
 import { Close, Content, DialogTitle, Overlay, Root, Trigger } from '@radix-ui/react-dialog';
-
 import centerScreen from 'styles/centerScreen';
 import { styled } from 'styles/stitches/stitches.config';
 
-import { contentShow, overlayShow } from 'animations/DialogShow';
 import Card from './Card';
 import Flex from './Flex';
 

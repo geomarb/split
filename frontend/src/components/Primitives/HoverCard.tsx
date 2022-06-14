@@ -1,13 +1,11 @@
-import * as HoverCardPrimitive from '@radix-ui/react-hover-card';
-
-import { styled } from 'styles/stitches/stitches.config';
-
 import {
 	slideDownAndFade,
 	slideLeftAndFade,
 	slideRightAndFade,
 	slideUpAndFade
 } from 'animations/Slide';
+import * as HoverCardPrimitive from '@radix-ui/react-hover-card';
+import { styled } from 'styles/stitches/stitches.config';
 
 const StyledContent = styled(HoverCardPrimitive.Content, {
 	borderRadius: 6,

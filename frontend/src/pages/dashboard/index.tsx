@@ -1,9 +1,6 @@
 import React, { lazy, ReactElement, Suspense } from 'react';
 import { dehydrate, QueryClient, useQuery } from 'react-query';
 import { GetServerSideProps, GetServerSidePropsContext } from 'next';
-import { useSession } from 'next-auth/react';
-
-import { InnerContainer } from 'styles/pages/dashboard.styles';
 
 import { getDashboardHeaderInfo } from 'api/authService';
 import { getDashboardBoardsRequest } from 'api/boardService';
@@ -12,6 +9,8 @@ import requireAuthentication from 'components/HOC/requireAuthentication';
 import Layout from 'components/layouts/Layout';
 import LoadingPage from 'components/loadings/LoadingPage';
 import Text from 'components/Primitives/Text';
+import { useSession } from 'next-auth/react';
+import { InnerContainer } from 'styles/pages/dashboard.styles';
 
 const RecentRetros = lazy(() => import('components/Dashboard/RecentRetros/RecentRetros'));
 const Tiles = lazy(() => import('components/Dashboard/Tiles'));

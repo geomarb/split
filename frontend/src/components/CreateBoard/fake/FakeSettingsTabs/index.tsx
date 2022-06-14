@@ -3,6 +3,7 @@ import React from 'react';
 import Flex from 'components/Primitives/Flex';
 import Separator from 'components/Primitives/Separator';
 import FakeTeamTab from './partials/TeamTab';
+
 import { StyledTextTab } from './styles';
 
 const FakeSettingsTabs = () => {

@@ -1,8 +1,6 @@
 import React, { useEffect } from 'react';
 import { SetterOrUpdater, useRecoilValue } from 'recoil';
 
-import { styled } from 'styles/stitches/stitches.config';
-
 import CardAvatars from 'components/CardBoard/CardAvatars';
 import Icon from 'components/icons/Icon';
 import Box from 'components/Primitives/Box';
@@ -16,6 +14,8 @@ import { CreateBoardData, createBoardError } from 'store/createBoard/atoms/creat
 import { BoardToAdd } from 'types/board/board';
 import { Team } from 'types/team/team';
 import { BoardUserRoles } from 'utils/enums/board.user.roles';
+import { styled } from 'styles/stitches/stitches.config';
+
 import SubCardBoard from './SubCardBoard';
 
 const MainContainer = styled(Flex, Box, {

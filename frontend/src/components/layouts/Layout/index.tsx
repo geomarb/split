@@ -1,13 +1,15 @@
 import React, { ReactNode, useMemo } from 'react';
-import { useRouter } from 'next/router';
-import { signOut, useSession } from 'next-auth/react';
 
 import LoadingPage from 'components/loadings/LoadingPage';
 import { Sidebar } from 'components/Sidebar';
 import { REFRESH_TOKEN_ERROR } from 'utils/constants';
 import { BOARDS_ROUTE, DASHBOARD_ROUTE } from 'utils/routes';
-import DashboardLayout from '../DashboardLayout';
+import { useRouter } from 'next/router';
+import { signOut, useSession } from 'next-auth/react';
+
 import { Container } from './styles';
+
+import DashboardLayout from '../DashboardLayout';
 
 const Layout: React.FC<{ children: ReactNode }> = ({ children }) => {
 	const { data: session } = useSession({ required: true });

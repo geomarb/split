@@ -1,9 +1,6 @@
 import React, { useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
-
-import { styled } from 'styles/stitches/stitches.config';
 
 import Icon from 'components/icons/Icon';
 import Button from 'components/Primitives/Button';
@@ -16,6 +13,8 @@ import { CardToAdd } from 'types/card/card';
 import UpdateCardDto from 'types/card/updateCard.dto';
 import AddCommentDto from 'types/comment/addComment.dto';
 import UpdateCommentDto from 'types/comment/updateComment.dto';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { styled } from 'styles/stitches/stitches.config';
 
 const ActionButton = styled(Button, {
 	padding: '$10 $14 !important',

@@ -2,9 +2,6 @@ import React from 'react';
 import { SetterOrUpdater } from 'recoil';
 import { deepClone } from 'fast-json-patch';
 
-import { highlight2Colors } from 'styles/stitches/partials/colors/highlight2.colors';
-import { styled } from 'styles/stitches/stitches.config';
-
 import CardAvatars from 'components/CardBoard/CardAvatars';
 import LeftArrow from 'components/CardBoard/CardBody/LeftArrow';
 import Icon from 'components/icons/Icon';
@@ -17,6 +14,8 @@ import { CreateBoardData } from 'store/createBoard/atoms/create-board.atom';
 import { BoardToAdd } from 'types/board/board';
 import { BoardUserToAdd } from 'types/board/board.user';
 import { BoardUserRoles } from 'utils/enums/board.user.roles';
+import { highlight2Colors } from 'styles/stitches/partials/colors/highlight2.colors';
+import { styled } from 'styles/stitches/stitches.config';
 
 interface SubCardBoardProps {
 	index: number;

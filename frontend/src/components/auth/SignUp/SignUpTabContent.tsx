@@ -2,6 +2,7 @@ import React, { Dispatch, useState } from 'react';
 
 import { TabsContent } from 'components/Primitives/Tab';
 import { SignUpEnum } from 'utils/signUp.enum';
+
 import RegisterForm from './RegisterForm';
 import SignUpForm from './SignUpForm';
 import SignUpOptionsForm from './SignUpOptionsForm';

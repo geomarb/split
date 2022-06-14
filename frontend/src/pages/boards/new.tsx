@@ -2,19 +2,7 @@ import { useCallback, useEffect } from 'react';
 import { FormProvider, useForm, useWatch } from 'react-hook-form';
 import { dehydrate, QueryClient } from 'react-query';
 import { GetServerSideProps, GetServerSidePropsContext } from 'next';
-import { useRouter } from 'next/router';
 import { useRecoilValue, useResetRecoilState, useSetRecoilState } from 'recoil';
-import { zodResolver } from '@hookform/resolvers/zod';
-
-import {
-	ButtonsContainer,
-	Container,
-	ContentContainer,
-	InnerContent,
-	PageHeader,
-	StyledForm,
-	SubContainer
-} from 'styles/pages/boards/new.styles';
 
 import { getStakeholders } from 'api/boardService';
 import { getAllTeams } from 'api/teamService';
@@ -33,6 +21,17 @@ import { createBoardDataState, createBoardError } from 'store/createBoard/atoms/
 import { toastState } from 'store/toast/atom/toast.atom';
 import { CreateBoardDto } from 'types/board/board';
 import { ToastStateEnum } from 'utils/enums/toast-types';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useRouter } from 'next/router';
+import {
+	ButtonsContainer,
+	Container,
+	ContentContainer,
+	InnerContent,
+	PageHeader,
+	StyledForm,
+	SubContainer
+} from 'styles/pages/boards/new.styles';
 
 const NewBoard = () => {
 	const router = useRouter();

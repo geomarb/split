@@ -2,6 +2,7 @@ import React from 'react';
 
 import CardType from 'types/card/card';
 import { ColumnInnerList } from 'types/column';
+
 import CardBoard from '../Card/CardBoard';
 
 const CardsList = React.memo<ColumnInnerList>(

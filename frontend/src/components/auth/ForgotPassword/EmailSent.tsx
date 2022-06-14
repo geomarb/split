@@ -1,8 +1,6 @@
 import { FC, useState } from 'react';
 import { useSetRecoilState } from 'recoil';
 
-import { styled } from 'styles/stitches/stitches.config';
-
 import Icon from 'components/icons/Icon';
 import Button from 'components/Primitives/Button';
 import Flex from 'components/Primitives/Flex';
@@ -11,6 +9,7 @@ import Text from 'components/Primitives/Text';
 import useUser from 'hooks/useUser';
 import { toastState } from 'store/toast/atom/toast.atom';
 import { ToastStateEnum } from 'utils/enums/toast-types';
+import { styled } from 'styles/stitches/stitches.config';
 
 const MainContainer = styled('form', Flex, {
 	width: '$500',

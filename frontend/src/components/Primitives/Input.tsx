@@ -1,10 +1,10 @@
 import React, { useMemo, useRef, useState } from 'react';
 import { useFormContext } from 'react-hook-form';
 
-import { styled } from 'styles/stitches/stitches.config';
-
 import Icon from 'components/icons/Icon';
 import isEmpty from 'utils/isEmpty';
+import { styled } from 'styles/stitches/stitches.config';
+
 import Flex from './Flex';
 import Text from './Text';
 

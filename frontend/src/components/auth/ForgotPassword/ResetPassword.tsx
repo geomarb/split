@@ -1,9 +1,5 @@
 import { FormProvider, useForm } from 'react-hook-form';
-import { useRouter } from 'next/router';
 import { useSetRecoilState } from 'recoil';
-import { zodResolver } from '@hookform/resolvers/zod';
-
-import { styled } from 'styles/stitches/stitches.config';
 
 import LogoIcon from 'components/icons/Logo';
 import Button from 'components/Primitives/Button';
@@ -15,6 +11,9 @@ import SchemaResetPasswordForm from 'schema/schemaResetPasswordForm';
 import { toastState } from 'store/toast/atom/toast.atom';
 import { NewPassword } from 'types/user/user';
 import { ToastStateEnum } from 'utils/enums/toast-types';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useRouter } from 'next/router';
+import { styled } from 'styles/stitches/stitches.config';
 
 const MainContainer = styled('form', Flex, {
 	width: '$500',

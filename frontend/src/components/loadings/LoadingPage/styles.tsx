@@ -1,6 +1,5 @@
-import { styled } from '@stitches/react';
-
 import Flex from 'components/Primitives/Flex';
+import { styled } from '@stitches/react';
 
 const Overlay = styled('div', Flex, {
 	position: 'absolute',

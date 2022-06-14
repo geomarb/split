@@ -1,7 +1,7 @@
-import { styled } from 'styles/stitches/stitches.config';
-
 import Flex from 'components/Primitives/Flex';
 import Text from 'components/Primitives/Text';
+import { styled } from 'styles/stitches/stitches.config';
+
 import Separator from '../Separator';
 
 const StyledMenuItem = styled(Flex, {

@@ -1,9 +1,8 @@
 import { useCallback, useMemo } from 'react';
 
-import { bubbleColors } from 'styles/stitches/partials/colors/bubble.colors';
-
 import Avatar from 'components/Primitives/Avatar';
 import Flex from 'components/Primitives/Flex';
+import { bubbleColors } from 'styles/stitches/partials/colors/bubble.colors';
 
 const FakeCardAvatars = () => {
 	const getRandomColor = useCallback(() => {

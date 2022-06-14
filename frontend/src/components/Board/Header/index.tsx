@@ -1,7 +1,4 @@
-import Link from 'next/link';
-import { useSession } from 'next-auth/react';
 import { useRecoilValue } from 'recoil';
-import { Popover, PopoverTrigger } from '@radix-ui/react-popover';
 
 import Breadcrumb from 'components/breadcrumb/Breadcrumb';
 import CardAvatars from 'components/CardBoard/CardAvatars';
@@ -15,6 +12,10 @@ import { boardInfoState } from 'store/board/atoms/board.atom';
 import BoardType from 'types/board/board';
 import { BoardUser, BoardUserNoPopulated } from 'types/board/board.user';
 import { BreadcrumbType } from 'types/board/Breadcrumb';
+import { Popover, PopoverTrigger } from '@radix-ui/react-popover';
+import Link from 'next/link';
+import { useSession } from 'next-auth/react';
+
 import {
 	BoardCounter,
 	MergeIconContainer,

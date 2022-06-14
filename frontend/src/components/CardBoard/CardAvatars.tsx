@@ -1,13 +1,12 @@
 import React, { useCallback, useMemo } from 'react';
 
-import { bubbleColors } from 'styles/stitches/partials/colors/bubble.colors';
-
 import Avatar from 'components/Primitives/Avatar';
 import Flex from 'components/Primitives/Flex';
 import Tooltip from 'components/Primitives/Tooltip';
 import { User } from 'types/user/user';
 import { BoardUserRoles } from 'utils/enums/board.user.roles';
 import { TeamUserRoles } from 'utils/enums/team.user.roles';
+import { bubbleColors } from 'styles/stitches/partials/colors/bubble.colors';
 
 type ListUsersType = {
 	user: User | string;

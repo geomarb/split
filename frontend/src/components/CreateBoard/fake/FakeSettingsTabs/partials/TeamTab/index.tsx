@@ -4,8 +4,10 @@ import Icon from 'components/icons/Icon';
 import Flex from 'components/Primitives/Flex';
 import Text from 'components/Primitives/Text';
 import Tooltip from 'components/Primitives/Tooltip';
-import FakeMainBoardCard from '../MainBoardCard';
+
 import { StyledBox } from './styles';
+
+import FakeMainBoardCard from '../MainBoardCard';
 
 const FakeTeamTab: React.FC = () => {
 	return (

@@ -1,14 +1,14 @@
 import * as React from 'react';
-import { useRouter } from 'next/router';
 import { useRecoilState } from 'recoil';
-import * as ToastPrimitive from '@radix-ui/react-toast';
-
-import { keyframes, styled } from 'styles/stitches/stitches.config';
 
 import Icon from 'components/icons/Icon';
 import { toastState } from 'store/toast/atom/toast.atom';
 import { ToastStateEnum } from 'utils/enums/toast-types';
 import { ROUTES } from 'utils/routes';
+import * as ToastPrimitive from '@radix-ui/react-toast';
+import { useRouter } from 'next/router';
+import { keyframes, styled } from 'styles/stitches/stitches.config';
+
 import Text from './Text';
 
 const hide = keyframes({

@@ -1,6 +1,6 @@
+import { BreadcrumbItemType } from 'types/board/Breadcrumb';
 import Link from 'next/link';
 
-import { BreadcrumbItemType } from 'types/board/Breadcrumb';
 import { StyledBreadcrumbItem } from './styles';
 
 type Props = {

@@ -1,13 +1,12 @@
 import React, { useMemo, useRef } from 'react';
 import { InfiniteData, UseInfiniteQueryResult } from 'react-query';
 
-import { styled } from 'styles/stitches/stitches.config';
-
 import CardBody from 'components/CardBoard/CardBody/CardBody';
 import LoadingPage from 'components/loadings/LoadingPage';
 import Flex from 'components/Primitives/Flex';
 import Text from 'components/Primitives/Text';
 import BoardType from 'types/board/board';
+import { styled } from 'styles/stitches/stitches.config';
 
 const LastUpdatedText = styled(Text, {
 	position: 'sticky',

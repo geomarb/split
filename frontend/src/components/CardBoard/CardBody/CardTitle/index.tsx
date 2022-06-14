@@ -1,5 +1,6 @@
-import Tooltip from '../../../Primitives/Tooltip';
 import { Title } from './partials/Title';
+
+import Tooltip from '../../../Primitives/Tooltip';
 
 type CardTitleProps = {
 	userIsParticipating: boolean;

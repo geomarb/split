@@ -1,9 +1,6 @@
 import { Dispatch, SetStateAction, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { useSetRecoilState } from 'recoil';
-import { zodResolver } from '@hookform/resolvers/zod';
-
-import { styled } from 'styles/stitches/stitches.config';
 
 import Icon from 'components/icons/Icon';
 import Button from 'components/Primitives/Button';
@@ -15,6 +12,9 @@ import SchemaEmail from 'schema/schemaEmail';
 import { toastState } from 'store/toast/atom/toast.atom';
 import { EmailUser } from 'types/user/user';
 import { ToastStateEnum } from 'utils/enums/toast-types';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { styled } from 'styles/stitches/stitches.config';
+
 import EmailSent from './EmailSent';
 
 const MainContainer = styled('form', Flex, {

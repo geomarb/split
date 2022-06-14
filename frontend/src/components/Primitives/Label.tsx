@@ -1,5 +1,4 @@
 import * as LabelPrimitive from '@radix-ui/react-label';
-
 import { styled } from 'styles/stitches/stitches.config';
 
 import Text from './Text';

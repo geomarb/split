@@ -1,7 +1,6 @@
-import { styled } from 'styles/stitches/stitches.config';
-
 import Button from 'components/Primitives/Button';
 import Flex from 'components/Primitives/Flex';
+import { styled } from 'styles/stitches/stitches.config';
 
 const StyledForm = styled('form', Flex, { width: '100%' });
 

@@ -1,7 +1,5 @@
 import { ChangeEvent, useEffect, useState } from 'react';
 
-import { styled } from 'styles/stitches/stitches.config';
-
 import Icon from 'components/icons/Icon';
 import {
 	AlertDialog,
@@ -16,6 +14,7 @@ import Text from 'components/Primitives/Text';
 import useCreateBoard from 'hooks/useCreateBoard';
 import { Team } from 'types/team/team';
 import isEmpty from 'utils/isEmpty';
+import { styled } from 'styles/stitches/stitches.config';
 
 interface QuickEditSubTeamsProps {
 	team: Team;

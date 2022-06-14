@@ -1,7 +1,6 @@
 import { ReactElement, Suspense } from 'react';
 import { dehydrate, QueryClient } from 'react-query';
 import { GetServerSideProps, GetServerSidePropsContext } from 'next';
-import { useSession } from 'next-auth/react';
 
 import { getBoardsRequest } from 'api/boardService';
 import MyBoards from 'components/Boards/MyBoards';
@@ -10,6 +9,7 @@ import requireAuthentication from 'components/HOC/requireAuthentication';
 import Layout from 'components/layouts/Layout';
 import LoadingPage from 'components/loadings/LoadingPage';
 import Flex from 'components/Primitives/Flex';
+import { useSession } from 'next-auth/react';
 
 const Boards = () => {
 	const { data: session } = useSession({ required: true });

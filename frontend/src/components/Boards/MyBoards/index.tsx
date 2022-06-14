@@ -11,8 +11,10 @@ import { toastState } from 'store/toast/atom/toast.atom';
 import BoardType from 'types/board/board';
 import { Team } from 'types/team/team';
 import { ToastStateEnum } from 'utils/enums/toast-types';
-import TeamHeader from '../TeamHeader';
+
 import { ScrollableContent } from './styles';
+
+import TeamHeader from '../TeamHeader';
 
 interface MyBoardsProps {
 	userId: string;

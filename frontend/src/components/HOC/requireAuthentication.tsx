@@ -1,7 +1,7 @@
 import { GetServerSideProps, GetServerSidePropsContext } from 'next';
-import { getSession } from 'next-auth/react';
 
 import { START_PAGE_ROUTE } from 'utils/routes';
+import { getSession } from 'next-auth/react';
 
 function requireAuthentication(gssp: GetServerSideProps) {
 	return async (ctx: GetServerSidePropsContext) => {

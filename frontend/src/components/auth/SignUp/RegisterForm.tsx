@@ -2,10 +2,7 @@ import React, { Dispatch, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { useMutation } from 'react-query';
 import { useSetRecoilState } from 'recoil';
-import { zodResolver } from '@hookform/resolvers/zod';
 import { AxiosError } from 'axios';
-
-import { styled } from 'styles/stitches/stitches.config';
 
 import { registerNewUser } from 'api/authService';
 import Icon from 'components/icons/Icon';
@@ -20,6 +17,8 @@ import { toastState } from 'store/toast/atom/toast.atom';
 import { RegisterUser, User } from 'types/user/user';
 import { ToastStateEnum } from 'utils/enums/toast-types';
 import { SignUpEnum } from 'utils/signUp.enum';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { styled } from 'styles/stitches/stitches.config';
 
 const StyledForm = styled('form', Flex, { width: '100%' });
 

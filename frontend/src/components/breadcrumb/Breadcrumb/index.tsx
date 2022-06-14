@@ -2,8 +2,10 @@ import React, { Fragment } from 'react';
 
 import Icon from 'components/icons/Icon';
 import { BreadcrumbItemType, BreadcrumbType } from 'types/board/Breadcrumb';
-import BreadcrumbItem from '../BreadcrumbItem';
+
 import { StyledList } from './styles';
+
+import BreadcrumbItem from '../BreadcrumbItem';
 
 type Props = {
 	items: BreadcrumbType;

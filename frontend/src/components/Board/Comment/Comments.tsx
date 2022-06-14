@@ -6,6 +6,7 @@ import Separator from 'components/Primitives/Separator';
 import Text from 'components/Primitives/Text';
 import { CardItemType } from 'types/card/cardItem';
 import CommentType from 'types/comment/comment';
+
 import AddCardOrComment from '../AddCardOrComment';
 import Comment from './Comment';
 

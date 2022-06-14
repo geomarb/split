@@ -1,5 +1,4 @@
 import { AlertDialogDescription } from '@radix-ui/react-alert-dialog';
-
 import { styled } from 'styles/stitches/stitches.config';
 
 import Flex from '../Flex';

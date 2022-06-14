@@ -1,9 +1,9 @@
 import { Dispatch, SetStateAction } from 'react';
 
-import { styled } from 'styles/stitches/stitches.config';
-
 import Button from 'components/Primitives/Button';
 import Flex from 'components/Primitives/Flex';
+import { styled } from 'styles/stitches/stitches.config';
+
 import FilterSelect from './FilterSelect';
 
 export interface OptionType {

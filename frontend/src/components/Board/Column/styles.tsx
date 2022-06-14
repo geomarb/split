@@ -1,8 +1,7 @@
-import { styled } from 'styles/stitches/stitches.config';
-
 import Box from 'components/Primitives/Box';
 import Flex from 'components/Primitives/Flex';
 import Text from 'components/Primitives/Text';
+import { styled } from 'styles/stitches/stitches.config';
 
 const CardsContainer = styled(Flex, {
 	mt: '$20',

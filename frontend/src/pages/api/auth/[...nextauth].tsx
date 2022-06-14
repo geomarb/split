@@ -1,7 +1,4 @@
 import NextAuth, { Session } from 'next-auth';
-import { JWT } from 'next-auth/jwt';
-import AzureADProvider from 'next-auth/providers/azure-ad';
-import CredentialsProvider from 'next-auth/providers/credentials';
 
 import { createOrLoginUserAzure, login, refreshAccessToken } from 'api/authService';
 import { Token } from 'types/token';
@@ -16,6 +13,9 @@ import {
 	UNDEFINED
 } from 'utils/constants';
 import { DASHBOARD_ROUTE, ERROR_500_PAGE, START_PAGE_ROUTE } from 'utils/routes';
+import { JWT } from 'next-auth/jwt';
+import AzureADProvider from 'next-auth/providers/azure-ad';
+import CredentialsProvider from 'next-auth/providers/credentials';
 
 async function getNewAccessToken(prevToken: JWT) {
 	try {

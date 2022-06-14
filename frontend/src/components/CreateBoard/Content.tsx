@@ -1,9 +1,6 @@
 import { useEffect } from 'react';
 import { FormProvider, useForm, useWatch } from 'react-hook-form';
 import { useRecoilValue, useResetRecoilState } from 'recoil';
-import { zodResolver } from '@hookform/resolvers/zod';
-
-import { styled } from 'styles/stitches/stitches.config';
 
 import Button from 'components/Primitives/Button';
 import Flex from 'components/Primitives/Flex';
@@ -12,6 +9,9 @@ import SchemaCreateBoard from 'schema/schemaCreateBoardForm';
 import { createBoardDataState } from 'store/createBoard/atoms/create-board.atom';
 import { CreateBoardDto } from 'types/board/board';
 import ClickEvent from 'types/events/clickEvent';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { styled } from 'styles/stitches/stitches.config';
+
 import BoardName from './BoardName';
 import SettingsTabs from './SettingsTabs';
 

@@ -1,7 +1,5 @@
 import React, { useMemo } from 'react';
 
-import { styled } from 'styles/stitches/stitches.config';
-
 import Icon from 'components/icons/Icon';
 import Avatar from 'components/Primitives/Avatar';
 import Button from 'components/Primitives/Button';
@@ -14,6 +12,7 @@ import CardType from 'types/card/card';
 import { CardItemType } from 'types/card/cardItem';
 import CommentType from 'types/comment/comment';
 import { getRandomColor } from 'utils/initialNames';
+import { styled } from 'styles/stitches/stitches.config';
 
 interface FooterProps {
 	boardId: string;

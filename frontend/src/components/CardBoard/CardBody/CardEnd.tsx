@@ -4,6 +4,7 @@ import Flex from 'components/Primitives/Flex';
 import Separator from 'components/Primitives/Separator';
 import Text from 'components/Primitives/Text';
 import BoardType from 'types/board/board';
+
 import CardAvatars from '../CardAvatars';
 import DeleteBoard from '../DeleteBoard';
 import CountCards from './CountCards';

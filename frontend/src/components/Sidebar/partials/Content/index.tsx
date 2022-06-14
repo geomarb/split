@@ -1,7 +1,4 @@
 import { useEffect, useState } from 'react';
-import Link from 'next/link';
-import { useRouter } from 'next/router';
-import { signOut } from 'next-auth/react';
 
 import Icon from 'components/icons/Icon';
 import Flex from 'components/Primitives/Flex';
@@ -14,6 +11,10 @@ import {
 	TEAMS_ROUTE,
 	USERS_ROUTE
 } from 'utils/routes';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
+import { signOut } from 'next-auth/react';
+
 import { StyledMenuItem, StyledSeparator, StyledText } from './styles';
 
 interface SidebarContentProps {

@@ -1,7 +1,4 @@
 import React, { useMemo, useState } from 'react';
-import { Draggable } from '@react-forked/dnd';
-
-import { styled } from 'styles/stitches/stitches.config';
 
 import Icon from 'components/icons/Icon';
 import Flex from 'components/Primitives/Flex';
@@ -9,6 +6,9 @@ import Text from 'components/Primitives/Text';
 import { getCommentsFromCardGroup } from 'helper/board/comments';
 import { BoardUser } from 'types/board/board.user';
 import CardType from 'types/card/card';
+import { Draggable } from '@react-forked/dnd';
+import { styled } from 'styles/stitches/stitches.config';
+
 import AddCardOrComment from '../AddCardOrComment';
 import Comments from '../Comment/Comments';
 import CardFooter from './CardFooter';

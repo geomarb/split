@@ -1,13 +1,12 @@
-import * as PopoverPrimitive from '@radix-ui/react-popover';
-
-import { styled } from 'styles/stitches/stitches.config';
-
 import {
 	slideDownAndFade,
 	slideLeftAndFade,
 	slideRightAndFade,
 	slideUpAndFade
 } from 'animations/Slide';
+import * as PopoverPrimitive from '@radix-ui/react-popover';
+import { styled } from 'styles/stitches/stitches.config';
+
 import Flex from './Flex';
 
 const StyledContent = styled(PopoverPrimitive.Content, {

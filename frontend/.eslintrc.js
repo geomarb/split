@@ -4,7 +4,7 @@ const fs = require('fs');
 const folders = fs
 	.readdirSync('src', { withFileTypes: true })
 	.filter((dirent) => dirent.isDirectory())
-	.map((dirent) => !['styles'].includes(dirent.name) && dirent.name);
+	.map((dirent) => !['styles', 'next-auth'].includes(dirent.name) && dirent.name);
 
 module.exports = {
 	env: {
@@ -86,11 +86,12 @@ module.exports = {
 					'error',
 					{
 						groups: [
-							// Packages. `react` related packages come first.
-							// Things that start with a letter (or digit or underscore), or `@` followed by a letter.
-							['^react', '^next', '^recoil', '^@?\\w'], // Absolute imports and Relative imports.
-							['^styles'],
-							[`^(${folders.join('|')})(/.*|$)`, '^\\.'], // for scss imports.
+							['^react', '^next', '^next*', '^recoil', '^@?\\w'],
+							[
+								`^(${folders.join('|')})(/.*|$)`,
+								'^((.{1,}/)(?!styles|next-auth)[a-z0-9]+)'
+							],
+							['^styles', 'styles', './styles'],
 							['^[^.]']
 						]
 					}

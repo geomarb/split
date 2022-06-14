@@ -1,6 +1,5 @@
-import { styled } from 'styles/stitches/stitches.config';
-
 import Icon from 'components/icons/Icon';
+import { styled } from 'styles/stitches/stitches.config';
 
 const GridContainer = styled('section', {
 	display: 'grid',

@@ -2,9 +2,6 @@ import React, { Dispatch, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { useQuery } from 'react-query';
 import { useSetRecoilState } from 'recoil';
-import { zodResolver } from '@hookform/resolvers/zod';
-
-import { styled } from 'styles/stitches/stitches.config';
 
 import { checkUserExists, checkUserExistsAD } from 'api/authService';
 import LogoIcon from 'components/icons/Logo';
@@ -19,6 +16,8 @@ import { NEXT_PUBLIC_ENABLE_AZURE } from 'utils/constants';
 import { ToastStateEnum } from 'utils/enums/toast-types';
 import isEmpty from 'utils/isEmpty';
 import { SignUpEnum } from 'utils/signUp.enum';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { styled } from 'styles/stitches/stitches.config';
 
 const StyledForm = styled('form', Flex, { width: '100%' });
 

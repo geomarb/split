@@ -1,60 +1,12 @@
 import React, { Dispatch, useState } from 'react';
-import * as CheckboxPrimitive from '@radix-ui/react-checkbox';
-import { styled } from '@stitches/react';
 
 import Icon from 'components/icons/Icon';
-import Flex from './Flex';
-import Text from './Text';
 
-const StyledCheckbox = styled(CheckboxPrimitive.Root, {
-	all: 'unset',
-	backgroundColor: 'white',
-	boxSizing: 'border-box',
-	borderRadius: '$2',
-	border: '1px solid $primaryBase',
-	display: 'flex',
-	alignItems: 'center',
-	justifyContent: 'center',
-	variants: {
-		variant: {
-			default: {
-				borderColor: '$primaryBase',
-				backgroundColor: 'transparent',
-				'&[data-state="checked"]': { backgroundColor: '$primaryBase' },
-				'&:disabled': {
-					borderColor: '$primary100',
-					'&[data-state="checked"]': {
-						backgroundColor: '$primary100'
-					}
-				}
-			},
-			error: {
-				borderColor: '$dangerBase',
-				'&[data-state="checked"]': {
-					backgroundColor: '$dangerBase'
-				},
-				'&:disabled': {
-					borderColor: '$primary100',
-					'&[data-state="checked"]': {
-						backgroundColor: '$primary100'
-					}
-				}
-			}
-		}
-	},
-	'&[data-state="indeterminate"]': {
-		borderColor: '$primaryBase',
-		backgroundColor: '$primaryBase'
-	},
-	defaultVariants: {
-		variant: 'default'
-	}
-});
-const StyledIndicator = styled(CheckboxPrimitive.Indicator, {
-	color: '$white'
-});
+import { StyledCheckbox, StyledIndicator } from './styles';
 
-export const CheckboxIndicator = StyledIndicator;
+import Flex from '../Flex';
+import Text from '../Text';
+
 const getIndeterminateSize = (boxSize: '12' | '16') => {
 	if (boxSize === '12') return '8';
 	return '10';
@@ -105,15 +57,11 @@ const Checkbox: React.FC<{
 					onCheckedChange={handleCheckedChange}
 					css={{
 						width: `$${size} !important`,
-						height: `$${size} !important`,
-						cursor: 'pointer'
+						height: `$${size} !important`
 					}}
 				>
-					<CheckboxIndicator
+					<StyledIndicator
 						css={{
-							display: 'flex',
-							alignItems: 'center',
-							justifyContent: 'center',
 							'& svg': {
 								width:
 									currentCheckValue === 'indeterminate'
@@ -125,7 +73,7 @@ const Checkbox: React.FC<{
 					>
 						{currentCheckValue === true && <Icon name="check" />}
 						{currentCheckValue === 'indeterminate' && <Icon name="indeterminate" />}
-					</CheckboxIndicator>
+					</StyledIndicator>
 				</StyledCheckbox>
 			</Flex>
 			<Text

@@ -2,8 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { useQuery } from 'react-query';
 import { useRecoilState, useSetRecoilState } from 'recoil';
 
-import { styled } from 'styles/stitches/stitches.config';
-
 import { getStakeholders } from 'api/boardService';
 import { getAllTeams } from 'api/teamService';
 import Icon from 'components/icons/Icon';
@@ -18,6 +16,8 @@ import {
 } from 'store/createBoard/atoms/create-board.atom';
 import { toastState } from 'store/toast/atom/toast.atom';
 import { Team } from 'types/team/team';
+import { styled } from 'styles/stitches/stitches.config';
+
 import MainBoardCard from './MainBoardCard';
 import QuickEditSubTeams from './QuickEditSubTeams';
 

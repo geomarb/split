@@ -1,6 +1,6 @@
 import React, { ReactNode } from 'react';
-import * as TooltipPrimitive from '@radix-ui/react-tooltip';
 
+import * as TooltipPrimitive from '@radix-ui/react-tooltip';
 import { styled } from 'styles/stitches/stitches.config';
 
 const StyledContent = styled(TooltipPrimitive.Content, {

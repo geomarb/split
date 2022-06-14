@@ -1,6 +1,5 @@
-import { styled } from 'styles/stitches/stitches.config';
-
 import Text from 'components/Primitives/Text';
+import { styled } from 'styles/stitches/stitches.config';
 
 const StyledTextTab = styled(Text, {
 	pb: '$12 !important',

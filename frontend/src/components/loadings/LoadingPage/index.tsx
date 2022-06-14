@@ -1,7 +1,8 @@
 import { CSSProps } from 'styles/stitches/stitches.config';
 
-import { Loading } from '../Loading';
 import { Overlay } from './styles';
+
+import { Loading } from '../Loading';
 
 type Props = CSSProps & {
 	size?: 50 | 80 | 100 | 150 | 220;

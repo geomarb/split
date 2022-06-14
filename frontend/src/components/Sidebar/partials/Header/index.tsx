@@ -2,8 +2,10 @@ import HeaderBannerIcon from 'components/icons/HeaderBanner';
 import Icon from 'components/icons/Icon';
 import Flex from 'components/Primitives/Flex';
 import Text from 'components/Primitives/Text';
-import Separator from '../Separator';
+
 import { StyledHeader } from './styles';
+
+import Separator from '../Separator';
 
 type Props = { firstName: string; lastName: string; email: string };
 
