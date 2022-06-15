@@ -1,6 +1,7 @@
 import * as z from 'zod';
 
 const SchemaSchedulingForm = z.object({
+	date: z.date(),
 	form: z.object({
 		lalbe: z.string(),
 		value: z.string()

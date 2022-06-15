@@ -1,4 +1,5 @@
 type SchedulingFormType = {
+	date: Date;
 	form: { label: string; value: string };
 	to: { label: string; value: string };
 	timeRange?: { label: string; value: string };
